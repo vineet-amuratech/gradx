@@ -142,7 +142,7 @@
   display: inline;
 }
 
-.gradx .gradx_gradient_type {
+.gradx .gradx_gradient_dropdown {
   height: 25px;
   background: #efefef;
   border: 1px solid #ccc;

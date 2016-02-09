@@ -311,13 +311,11 @@ var gradX = function(container, _options) {
                     axis: 'x',
                     start: function() {
                         gradx.current_slider_id = "." + this.data('slider-id;'); //got full jQuery power here !
-                        console.log('gradx.current_slider_id : ', gradx.current_slider_id);
                     },
                     drag: function() {
 
                         gradx.update_style_array();
                         gradx.apply_style(gradx.panel, gradx.get_style_value());
-                        console.log('gradx.current_slider_id : ', gradx.current_slider_id);
                         var left = gradx.$container.find(gradx.current_slider_id).css("left");
 
 
@@ -446,21 +444,21 @@ var gradX = function(container, _options) {
             var html = "<div class='gradx'>\n\
                         <div class='gradx_add_slider gradx_btn'><i class='icon icon-add'></i>add</div>\n\
                         <div class='gradx_slectboxes'>\n\
-                        <select class='gradx_gradient_type'>\n\
-                            <option value='linear'>Linear</option>\n\
+                        <select class='gradx_gradient_dropdown gradx_gradient_type'>\n\
+                            <option value='lineagradx_gradient_dropdownr'>Linear</option>\n\
                             <option value='circle'>Radial - Circle</option>\n\
                             <option value='ellipse'>Radial - Ellipse</option>\n\
                         </select>\n\
-                        <select class='gradx_gradient_type gradx_gradient_subtype'>\n\
+                        <select class='gradx_gradient_dropdown gradx_gradient_subtype'>\n\
                             <option class='gradx_gradient_subtype_desc' value='gradient-direction' disabled>gradient direction</option>\n\
                             <option value='left' selected>Left</option>\n\
                             <option value='right'>Right</option>\n\
                             <option value='top'>Top</option>\n\
                             <option value='bottom'>Bottom</option>\n\
                         </select>\n\
-                        <select class='gradx_gradient_type gradx_gradient_subtype2 gradx_hide'>\n\
+                        <select class='gradx_gradient_dropdown gradx_gradient_subtype2 gradx_hide'>\n\
                         </select>\n\
-                        <select class='gradx_gradient_type gradx_radial_gradient_size gradx_hide'>\n\
+                        <select class='gradx_gradient_dropdown gradx_radial_gradient_size gradx_hide'>\n\
                         </select>\n\
                         </div>\n\
                         <div class='gradx_container gradx_" + id + "'>\n\
@@ -574,6 +572,8 @@ var gradX = function(container, _options) {
 
                 gradx.type = type;
                 gradx.direction = gradx.$container.find('.gradx_gradient_subtype').val();
+
+
                 gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
             });
 
