@@ -44,7 +44,7 @@
 var gradX = function(container, _options) {
 
     var options = {
-        target: '', // jquery selector ->
+        target: null, // string / jquery selector
         sliders: [],
         direction: 'left',
         //if linear left | top | right | bottom
@@ -114,9 +114,11 @@ var gradX = function(container, _options) {
         },
         //if target element is specified the target's style (background) is updated
         update_target: function(values) {
-            var i, v_len = values.length;
-            for (i = 0; i < v_len; i++) {
-                this.$target.css("background-image", values[i]);
+            if(this.$target != undefined){
+                var i, v_len = values.length;
+                for (i = 0; i < v_len; i++) {
+                    this.$target.css("background-image", values[i]);
+                }
             }
         },
         //apply styles on fly
@@ -399,7 +401,7 @@ var gradX = function(container, _options) {
         },
         destroy: function() {
             var options = {
-                target: '', //element selector -> string
+                target: null, // string / jquery selector
                 sliders: [],
                 direction: 'left',
                 //if linear left | top | right | bottom
@@ -657,14 +659,12 @@ var gradX = function(container, _options) {
     //apply options to gradx object
 
     // initialize $target
-    if(typeof(options.target) == 'string'){
-        options.$target = gradx.gx(options.target);
-    }else if(options.target instanceof(jQuery)){
-        options.$target = options.target;
-    }
-
-    if(options.$target == undefined || options.$target == null || options.$target.length == 0){
-        throw 'target invalid';
+    if(options.target != null || options.target != undefined){
+        if(typeof(options.target) == 'string'){
+            options.$target = gradx.gx(options.target);
+        }else if(options.target instanceof(jQuery)){
+            options.$target = options.target;
+        }
     }
 
     // initialize $container
