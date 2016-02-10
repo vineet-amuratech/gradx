@@ -51,7 +51,7 @@ var gradX = function(container, _options) {
         //if radial left | center | right , top | center | bottom
         type: 'linear', //linear | circle | ellipse
         code_shown: false, //false | true
-        width: '455px',
+        width: '300px',
         height: '130px',
         debug: false,
         change: function(sliders, styles) {
@@ -88,7 +88,7 @@ var gradX = function(container, _options) {
             do {
                 pos = parseInt(Math.random() * 100);
             }
-            while (this.rand_pos.indexOf(pos) > -1);
+            while (this.rand_pos.indexOf(pos) != -1);
 
             this.rand_pos.push(pos);
             return pos;
@@ -282,8 +282,7 @@ var gradX = function(container, _options) {
                     break;
 
                 //convert % to px based on containers width
-                var delta = this.min_width; // range: this.min_width to this.max_width
-                position = parseInt((obj[k].position * this.container_width) / 100) + delta + "px";
+                position = parseInt((obj[k].position * this.container_width) / 100) + this.min_width + "px";
 
                 slider_id = "gradx_slider_" + this.slider_index; //create an id for this slider
                 this.sliders.push([
@@ -311,11 +310,9 @@ var gradX = function(container, _options) {
                         gradx.apply_default_styles();
                         var left = gradx.$container.find(gradx.current_slider_id).css("left");
 
-                        // if (parseInt(left) > 120) {
-                        //     left = "272px";
-                        // } else {
-                        //     left = "120px";
-                        // }
+                        if(parseInt(left) < $('.gradx_slider_info').width()/2){
+                            left = $('.gradx_slider_info').width()/2;
+                        }
 
                         gradx.$container.find(".gradx_slider_info") //info element cached before
                         .css("left", left)
@@ -426,48 +423,43 @@ var gradX = function(container, _options) {
             var html = "<div class='gradx'>\n\
                         <div class='row gradx_controls_row'>\n\
                             <div class='col-sm-2'>\n\
-                                <div class='gradx_add_slider btn btn-sm btn-default' title='add stop'><i class='fa fa-plus'></i></div>\n\
+                                <div class='gradx_add_slider btn' title='add stop'><i class='fa fa-plus'></i></div>\n\
                             </div>\n\
-                            <div class='col-sm-3'>\n\
-                                <div class='form-group'>\n\
-                                    <select class='form-control input-sm gradx_gradient_type'>\n\
+                            <div class='col-sm-3 gradx-stripped-col'>\n\
+                                    <select class='form-control gradx-input-xs gradx_gradient_type'>\n\
                                         <option value='linear'>Linear</option>\n\
                                         <option value='circle'>Radial - Circle</option>\n\
                                         <option value='ellipse'>Radial - Ellipse</option>\n\
                                     </select>\n\
-                                </div>\n\
                             </div>\n\
-                            <div class='col-sm-3'>\n\
-                                <div class='form-group'>\n\
-                                    <select class='form-control input-sm gradx_gradient_subtype'>\n\
+                            <div class='col-sm-3 gradx-stripped-col'>\n\
+                                    <select class='form-control gradx-input-xs gradx_gradient_subtype'>\n\
                                         <option class='gradx_gradient_subtype_desc' value='gradient-direction' disabled>gradient direction</option>\n\
                                         <option value='left' selected>Left</option>\n\
                                         <option value='right'>Right</option>\n\
                                         <option value='top'>Top</option>\n\
                                         <option value='bottom'>Bottom</option>\n\
                                     </select>\n\
-                                </div>\n\
                             </div>\n\
-                            <div class='col-sm-3'>\n\
-                                <div class='form-group'>\n\
-                                    <select class='form-control input-sm gradx_gradient_subtype2 gradx_hide'>\n\
+                            <div class='col-sm-3 gradx-stripped-col'>\n\
+                                    <select class='form-control gradx-input-xs gradx_gradient_subtype2 gradx_hide'>\n\
                                     </select>\n\
-                                    <select class='form-control input-sm gradx_radial_gradient_size gradx_hide'>\n\
+                                    <select class='form-control gradx-input-xs gradx_radial_gradient_size gradx_hide'>\n\
                                     </select>\n\
-                                </div>\n\
                             </div>\n\
                         </div>\n\
                         <div class='gradx_container gradx_" + id + "'>\n\
                             <div class='gradx_stop_sliders_" + id + "'></div>\n\
                             <div class='gradx_panel gradx_panel_" + id + "'></div>\n\
-                            <div class='gradx_start_sliders gradx_start_sliders_" + id + "'>\n\
-                                <div class='cp-default gradx_slider_info'>\n\
-                                    <div class='gradx_slider_controls'>\n\
-                                        <div class='btn btn-default btn-xs gradx_delete_slider'><i class='fa fa-remove'></i></div>\n\
-                                    </div>\n\
-                                    <div class='gradx_slider_content'></div>\n\
-                                </div> \n\
+                            <div class='gradx_start_sliders_container'>\n\
+                                <div class='gradx_start_sliders gradx_start_sliders_" + id + "'></div>\n\
                             </div>\n\
+                            <div class='cp-default gradx_slider_info'>\n\
+                                <div class='gradx_slider_controls'>\n\
+                                    <div class='btn btn-default btn-xs gradx_delete_slider'><i class='fa fa-remove'></i></div>\n\
+                                </div>\n\
+                                <div class='gradx_slider_content'></div>\n\
+                            </div> \n\
                         </div>\n\
                     </div>";
 
@@ -490,13 +482,11 @@ var gradX = function(container, _options) {
 
             // this.container = this.$container.find(".gradx_" + id);
             this.panel = this.$container.find(".gradx_panel_" + id);
-            this.min_width = 26, // this.panel.offset().left;
-            this.max_width = 426, // this.panel.offset().left + this.panel.offset().width;
             // this.height = 86;
 
-            //.hide();
-            //this.info.hide();
-            this.container_width = 400 //HARDCODE;
+            this.container_width = this.$container.find(".gradx_container").width();
+            this.min_width = this.$container.find(".gradx_container").offset().left;
+
             this.add_slider(sliders);
 
             gradx.add_event(document, 'click', function() {

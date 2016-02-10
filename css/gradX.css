@@ -18,46 +18,41 @@
   float: left;
 }
 
-.gradx .gradx_controls_row{
-  height: 40%;
-}
-
 .gradx .gradx_container {
-  padding: 1%;
-  background: white;
-  padding-left: 2%;
-  border: 2px solid #e5e5e5;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -o-border-radius: 2px;
-  height: 65%;
+  padding: 0% 2% 0% 2%;
+  height: calc(100% - 30px);
+  overflow: hidden;
 }
 
 .gradx .gradx_panel {
   width: 98%;
-  height: 70%;
+  height: 80%;
   border: 1px solid #ccc;
 }
 
-.gradx .gradx_start_sliders {
-  width: 100%;
-  margin-top: 5px;
-  margin-left: -0.4em;
-  background: whitesmoke;
+.gradx_start_sliders_container{
   height: 20%;
+  padding-top: 5px;
+}
+
+.gradx .gradx_start_sliders {
+  width: 102%;
+  margin-left: -2%;
+  background: whitesmoke;
+  height: 100%;
   box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   -webkit-box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   -moz-box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   -o-box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   border: 1px solid #f1f1f1;
+  position: relative;
 }
 
 .gradx .gradx_slider {
   position: absolute;
   left: 0px;
   width: 10px;
-  height: 10px;
+  height: 95%;
   background: red;
   border: 1px solid black;
   display: inline-block;
@@ -75,7 +70,7 @@
   bottom: 10px;
   left: 4px;
   border-style: solid;
-  border-width: 60px 1px 0px 0px;
+  border-width: 6000px 1px 0px 0px;
   border-color: transparent #000;
   display: block;
   width: 0;
@@ -90,7 +85,7 @@
 }
 
 .gradx .gradx_slider_controls {
-  margin-left: 15px;
+  margin-left: 145px;
   padding-top:4px;
   padding-bottom: 4px;
 }
@@ -164,4 +159,16 @@
   -webkit-border-radius: 4px;
   border-radius: 4px;
   background-color: #333;
+}
+
+.gradx-input-xs{
+  height: 25px !important;
+  padding: 0px !important;
+  font-size: 12px !important;
+  border-radius: 3px !important;
+}
+
+.gradx-stripped-col{
+  padding-right: 5px !important;
+  padding-left: 5px !important;
 }
