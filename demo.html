@@ -4,24 +4,16 @@
         <script src="js/jquery.js"></script>
         <link type="text/css" rel="stylesheet" href="css/gradX.css" />
         <link type="text/css" rel="stylesheet" href="css/colorpicker.css" />
+        <link type="text/css" rel="stylesheet" href="css/bootstrap.css" />
+        <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.css" />
+
         <script src="js/colorpicker.js"></script>
         <!-- <script src="js/dom-drag.js"></script> -->
         <script src="js/jquery-ui.js"></script>
+        <script src="js/bootstrap.js"></script>
         <script src="js/gradX.js"></script>
 
         <style>
-            .target-container {
-                margin:0 auto;
-                text-align: center;
-                border: 1px solid #ccc;
-                background: #f8f8f8;
-                margin: 0 auto;
-                border-radius: 4px;
-                width:auto;
-                padding:10px;
-                float: left;
-            }
-
             .target_text {
                 margin: 0px auto;
                 margin-top: 40%;
@@ -38,27 +30,25 @@
                 margin: 0px 10%;
                 width: 150px;
                 height: 150px;
-                display:inline-block;
             }
             #target {
                 border-radius: 150px;
             }
-
-            #gradX {
-                height: 200px;
-                float: left;
-            }
-
         </style>
     </head>
 
 
     <body>
-        <div id="gradX" ></div>
-
-        <div class="target-container">
-            <div class="target" id="target"><div class="target_text">Target #1</div></div>
-            <div class="target" id="target2"><div class="target_text">Target #2</div></div>
+        <div class='row'>
+            <div class='col-md-4'>
+                <div id="gradX" ></div>
+            </div>
+            <div class='col-md-offset-1 col-md-3'>
+                <div class="target" id="target"><div class="target_text">Target #1</div></div>
+            </div>
+            <div class='col-md-offset-1 col-md-3'>
+                <div class="target" id="target2"><div class="target_text">Target #2</div></div>
+            </div>
         </div>
 
         <script>

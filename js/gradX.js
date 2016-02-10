@@ -51,7 +51,8 @@ var gradX = function(container, _options) {
         //if radial left | center | right , top | center | bottom
         type: 'linear', //linear | circle | ellipse
         code_shown: false, //false | true
-        width: '444px',
+        width: '465px',
+        height: '140px',
         debug: false,
         change: function(sliders, styles) {
             //nothing to do here by default
@@ -155,9 +156,6 @@ var gradX = function(container, _options) {
             if(this.debug == true){
                 console.log('gradient :', values);
             }
-
-            this.$container.find('.gradx_code').html(css);
-
         },
         //on load
         apply_default_styles: function() {
@@ -426,28 +424,41 @@ var gradX = function(container, _options) {
         load_gradx: function($container, sliders) {
             this.$container = $container;
             var id = this.id = gradx.get_random_number();
-            this.$container.find('.gradx').css('width', gradx.width).data('gradx-id',id);
 
             this.current_slider_id = false;
             var html = "<div class='gradx'>\n\
-                        <div class='gradx_add_slider gradx_btn'><i class='icon icon-add'></i>add</div>\n\
-                        <div class='gradx_slectboxes'>\n\
-                        <select class='gradx_gradient_dropdown gradx_gradient_type'>\n\
-                            <option value='lineagradx_gradient_dropdownr'>Linear</option>\n\
-                            <option value='circle'>Radial - Circle</option>\n\
-                            <option value='ellipse'>Radial - Ellipse</option>\n\
-                        </select>\n\
-                        <select class='gradx_gradient_dropdown gradx_gradient_subtype'>\n\
-                            <option class='gradx_gradient_subtype_desc' value='gradient-direction' disabled>gradient direction</option>\n\
-                            <option value='left' selected>Left</option>\n\
-                            <option value='right'>Right</option>\n\
-                            <option value='top'>Top</option>\n\
-                            <option value='bottom'>Bottom</option>\n\
-                        </select>\n\
-                        <select class='gradx_gradient_dropdown gradx_gradient_subtype2 gradx_hide'>\n\
-                        </select>\n\
-                        <select class='gradx_gradient_dropdown gradx_radial_gradient_size gradx_hide'>\n\
-                        </select>\n\
+                        <div class='row'>\n\
+                            <div class='col-sm-2'>\n\
+                                <div class='gradx_add_slider btn btn-sm btn-default'><i class='fa fa-add'></i>add</div>\n\
+                            </div>\n\
+                            <div class='col-sm-3'>\n\
+                                <div class='form-group'>\n\
+                                    <select class='form-control input-sm gradx_gradient_type'>\n\
+                                        <option value='linear'>Linear</option>\n\
+                                        <option value='circle'>Radial - Circle</option>\n\
+                                        <option value='ellipse'>Radial - Ellipse</option>\n\
+                                    </select>\n\
+                                </div>\n\
+                            </div>\n\
+                            <div class='col-sm-3'>\n\
+                                <div class='form-group'>\n\
+                                    <select class='form-control input-sm gradx_gradient_subtype'>\n\
+                                        <option class='gradx_gradient_subtype_desc' value='gradient-direction' disabled>gradient direction</option>\n\
+                                        <option value='left' selected>Left</option>\n\
+                                        <option value='right'>Right</option>\n\
+                                        <option value='top'>Top</option>\n\
+                                        <option value='bottom'>Bottom</option>\n\
+                                    </select>\n\
+                                </div>\n\
+                            </div>\n\
+                            <div class='col-sm-3'>\n\
+                                <div class='form-group'>\n\
+                                    <select class='form-control input-sm gradx_gradient_subtype2 gradx_hide'>\n\
+                                    </select>\n\
+                                    <select class='form-control input-sm gradx_radial_gradient_size gradx_hide'>\n\
+                                    </select>\n\
+                                </div>\n\
+                            </div>\n\
                         </div>\n\
                         <div class='gradx_container gradx_" + id + "'>\n\
                             <div class='gradx_stop_sliders_" + id + "'></div>\n\
@@ -455,7 +466,7 @@ var gradX = function(container, _options) {
                             <div class='gradx_start_sliders gradx_start_sliders_" + id + "'>\n\
                                 <div class='cp-default gradx_slider_info'>\n\
                                     <div class='gradx_slider_controls'>\n\
-                                        <div class='gradx_btn gradx_delete_slider'><i class='icon icon-remove'></i>delete</div>\n\
+                                        <div class='gradx_btn gradx_delete_slider'><i class='fa fa-remove'></i>delete</div>\n\
                                     </div>\n\
                                     <div class='gradx_slider_content'></div>\n\
                                 </div> \n\
@@ -464,6 +475,7 @@ var gradX = function(container, _options) {
                     </div>";
 
             this.$container.html(html);
+            this.$container.find('.gradx').css('width', gradx.width).css('height', gradx.height).data('gradx-id',id);
 
 
             //generates html to select the different gradient sizes
@@ -534,18 +546,6 @@ var gradX = function(container, _options) {
 
                 gradx.current_slider_id = false; //no slider is selected
 
-            });
-
-            this.$container.find('.gradx_code').focus(function() {
-                var $this = gradx.gx(this);
-                $this.select();
-
-                // Work around Chrome's little problem
-                $this.mouseup(function() {
-                    // Prevent further mouseup intervention
-                    $this.unbind("mouseup");
-                    return false;
-                });
             });
 
             this.$container.find('.gradx_gradient_type').change(function() {
