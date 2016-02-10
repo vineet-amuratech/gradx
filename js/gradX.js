@@ -114,7 +114,6 @@ var gradX = function(container, _options) {
         },
         //if target element is specified the target's style (background) is updated
         update_target: function(values) {
-            console.log('update_target : ', values)
             var i, v_len = values.length;
             for (i = 0; i < v_len; i++) {
                 this.$target.css("background-image", values[i]);
@@ -155,7 +154,6 @@ var gradX = function(container, _options) {
             this.update_target(values);
 
             if(this.debug == true){
-                console.log('gradient :', values);
             }
         },
         //on load
@@ -243,7 +241,6 @@ var gradX = function(container, _options) {
         },
         load_info: function(ele) {
             this.current_slider_id = "." + $(ele).data('slider-id');
-            console.log(this.current_slider_id);
             //check if current clicked element is an slider
             if (this.slider_ids.indexOf($(ele).data('slider-id')) != -1) {
                 var color = this.$container.css("backgroundColor");
