@@ -51,8 +51,8 @@ var gradX = function(container, _options) {
         //if radial left | center | right , top | center | bottom
         type: 'linear', //linear | circle | ellipse
         code_shown: false, //false | true
-        width: '465px',
-        height: '140px',
+        width: '455px',
+        height: '130px',
         debug: false,
         change: function(sliders, styles) {
             //nothing to do here by default
@@ -114,6 +114,7 @@ var gradX = function(container, _options) {
         },
         //if target element is specified the target's style (background) is updated
         update_target: function(values) {
+            console.log('update_target : ', values)
             var i, v_len = values.length;
             for (i = 0; i < v_len; i++) {
                 this.$target.css("background-image", values[i]);
@@ -159,7 +160,7 @@ var gradX = function(container, _options) {
         },
         //on load
         apply_default_styles: function() {
-            this.update_style_array()
+            this.update_style_array();
             var value = this.get_style_value();
             this.apply_style(this.panel, value);
         },
@@ -194,6 +195,7 @@ var gradX = function(container, _options) {
                 //since only one slider , so simple background
 
                 style_str = this.sliders[0][0];
+                style_str = this.direction + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%") + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%"); //add direction for gradient
             } else {
                 var style_str = "", suffix = "";
                 for (var i = 0; i < len; i++) {
@@ -241,14 +243,14 @@ var gradX = function(container, _options) {
         },
         load_info: function(ele) {
             this.current_slider_id = "." + $(ele).data('slider-id');
+            console.log(this.current_slider_id);
             //check if current clicked element is an slider
-            if (this.slider_ids.indexOf(ele.id) > -1) { //javascript does not has # in its id
-
+            if (this.slider_ids.indexOf($(ele).data('slider-id')) != -1) {
                 var color = this.$container.css("backgroundColor");
                 //but what happens if @color is not in RGB ? :(
                 var rgb = this.get_rgb_obj(color);
 
-                var left = this.$container.css("left");
+                var left = $(ele).css("left");
                 this.$container.find(".gradx_slider_info") //info element cached before
                 .css("left", left)
                 .show();
@@ -309,8 +311,7 @@ var gradX = function(container, _options) {
                         gradx.current_slider_id = "." + $(this).data('slider-id'); //got full jQuery power here !
                     },
                     drag: function() {
-                        gradx.update_style_array();
-                        gradx.apply_style(gradx.panel, gradx.get_style_value());
+                        gradx.apply_default_styles();
                         var left = gradx.$container.find(gradx.current_slider_id).css("left");
 
                         // if (parseInt(left) > 120) {
@@ -342,8 +343,7 @@ var gradX = function(container, _options) {
                     if (gradx.current_slider_id != false) {
                         var rgba = color.toRgbString();
                         gradx.$container.find(gradx.current_slider_id).css('background-color', rgba);
-                        gradx.update_style_array();
-                        gradx.apply_style(gradx.panel, gradx.get_style_value());
+                        gradx.apply_default_styles();
                     }
                 },
                 change: function() {
@@ -427,9 +427,9 @@ var gradX = function(container, _options) {
 
             this.current_slider_id = false;
             var html = "<div class='gradx'>\n\
-                        <div class='row'>\n\
+                        <div class='row gradx_controls_row'>\n\
                             <div class='col-sm-2'>\n\
-                                <div class='gradx_add_slider btn btn-sm btn-default'><i class='fa fa-add'></i>add</div>\n\
+                                <div class='gradx_add_slider btn btn-sm btn-default' title='add stop'><i class='fa fa-plus'></i></div>\n\
                             </div>\n\
                             <div class='col-sm-3'>\n\
                                 <div class='form-group'>\n\
@@ -466,7 +466,7 @@ var gradX = function(container, _options) {
                             <div class='gradx_start_sliders gradx_start_sliders_" + id + "'>\n\
                                 <div class='cp-default gradx_slider_info'>\n\
                                     <div class='gradx_slider_controls'>\n\
-                                        <div class='gradx_btn gradx_delete_slider'><i class='fa fa-remove'></i>delete</div>\n\
+                                        <div class='btn btn-default btn-xs gradx_delete_slider'><i class='fa fa-remove'></i></div>\n\
                                     </div>\n\
                                     <div class='gradx_slider_content'></div>\n\
                                 </div> \n\
@@ -516,9 +516,7 @@ var gradX = function(container, _options) {
                         position: gradx.get_random_position() //no % symbol
                     }
                 ]);
-                gradx.update_style_array();
-                gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
-
+                gradx.apply_default_styles();
             });
 
             //cache the element
@@ -528,24 +526,26 @@ var gradX = function(container, _options) {
             gradx.set_colorpicker("blue");
 
             this.$container.find('.gradx_delete_slider').click(function() {
-                gradx.$container.find(gradx.current_slider_id).remove();
-                gradx.$container.find(".gradx_slider_info").hide();
-                var id = gradx.current_slider_id.replace(".", "");
+                if(gradx.slider_ids.length > 1){
+                    gradx.$container.find(gradx.current_slider_id).remove();
+                    gradx.$container.find(".gradx_slider_info").hide();
+                    var id = gradx.current_slider_id.replace(".", "");
 
-                //remove all references from array for current deleted slider
+                    //remove all references from array for current deleted slider
 
-                for (var i = 0; i < gradx.slider_ids.length; i++) {
-                    if (gradx.slider_ids[i] == id) {
-                        gradx.slider_ids.splice(i, 1);
+                    for (var i = 0; i < gradx.slider_ids.length; i++) {
+                        if (gradx.slider_ids[i] == id) {
+                            gradx.slider_ids.splice(i, 1);
+                        }
                     }
+
+                    //apply modified style after removing the slider
+                    gradx.apply_default_styles();
+
+                    gradx.current_slider_id = false; //no slider is selected
+                }else{
+                    alert('Atleast one stop is required to generate a gradient');
                 }
-
-                //apply modified style after removing the slider
-                gradx.update_style_array();
-                gradx.apply_style(gradx.panel, gradx.get_style_value());
-
-                gradx.current_slider_id = false; //no slider is selected
-
             });
 
             this.$container.find('.gradx_gradient_type').change(function() {
