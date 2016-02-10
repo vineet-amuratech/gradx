@@ -22,14 +22,18 @@
 
 'use strict';
 
+
 // //make me jquery UI  independent
 // if (typeof jQuery.fn.draggable === "undefined") {
+//      var MIN_WIDTH = 26, // this.panel.offset().left;
+//      MAX_WIDTH = 426, // this.panel.offset().left + this.panel.offset().width;
+//      HEIGHT = 86;
 
 //     (function($) {
 
 //         $.fn.draggable = function() {
 //             this.css('top', "121px");
-//             Drag.init(this[0], null, 26, 426, 86, 86);
+//             Drag.init(this[0], null, MIN_WIDTH, MAX_WIDTH, HEIGHT, HEIGHT);
 //             return this;
 //         };
 
@@ -90,7 +94,6 @@ var gradX = function(container, _options) {
 
         },
         get_random_rgb: function() {
-
             var R, G, B, color;
 
             do {
@@ -104,7 +107,6 @@ var gradX = function(container, _options) {
 
             this.rand_RGB.push(color);
             return color;
-
         },
         get_random_number: function() {
             return Math.round(Math.random() * 100000000);
@@ -137,8 +139,6 @@ var gradX = function(container, _options) {
                 //normal color
                 values = [value];
             }
-
-
 
             var len = values.length, css = '';
 
@@ -251,11 +251,9 @@ var gradX = function(container, _options) {
                 var rgb = this.get_rgb_obj(color);
 
                 var left = this.$container.css("left");
-                if (parseInt(left) > 26 && parseInt(left) < 426) {
-                    this.$container.find(".gradx_slider_info") //info element cached before
-                        .css("left", left)
-                        .show();
-                }
+                this.$container.find(".gradx_slider_info") //info element cached before
+                .css("left", left)
+                .show();
 
                 this.set_colorpicker(rgb);
             }
@@ -287,7 +285,7 @@ var gradX = function(container, _options) {
                     break;
 
                 //convert % to px based on containers width
-                var delta = 26; //range: 26px tp 426px
+                var delta = this.min_width; // range: this.min_width to this.max_width
                 position = parseInt((obj[k].position * this.container_width) / 100) + delta + "px";
 
                 slider_id = "gradx_slider_" + this.slider_index; //create an id for this slider
@@ -323,11 +321,9 @@ var gradX = function(container, _options) {
                         //     left = "120px";
                         // }
 
-                        if (parseInt(left) > 26 && parseInt(left) < 426) {
-                            gradx.$container.find(".gradx_slider_info") //info element cached before
-                            .css("left", left)
-                            .show();
-                        }
+                        gradx.$container.find(".gradx_slider_info") //info element cached before
+                        .css("left", left)
+                        .show();
 
                         var color = gradx.$container.find(gradx.current_slider_id).css("backgroundColor");
                         // TODO - handle non RGB colors
@@ -485,6 +481,10 @@ var gradX = function(container, _options) {
 
             // this.container = this.$container.find(".gradx_" + id);
             this.panel = this.$container.find(".gradx_panel_" + id);
+            this.min_width = 26, // this.panel.offset().left;
+            this.max_width = 426, // this.panel.offset().left + this.panel.offset().width;
+            // this.height = 86;
+
             //.hide();
             //this.info.hide();
             this.container_width = 400 //HARDCODE;
