@@ -22,20 +22,20 @@
 
 'use strict';
 
-//make me jquery UI  independent
-if (typeof jQuery.fn.draggable === "undefined") {
+// //make me jquery UI  independent
+// if (typeof jQuery.fn.draggable === "undefined") {
 
-    (function($) {
+//     (function($) {
 
-        $.fn.draggable = function() {
-            this.css('top', "121px");
-            Drag.init(this[0], null, 26, 426, 86, 86);
-            return this;
-        };
+//         $.fn.draggable = function() {
+//             this.css('top', "121px");
+//             Drag.init(this[0], null, 26, 426, 86, 86);
+//             return this;
+//         };
 
-    }(jQuery));
+//     }(jQuery));
 
-}
+// }
 
 var gradX = function(container, _options) {
 
@@ -310,37 +310,29 @@ var gradX = function(container, _options) {
                     containment: 'parent',
                     axis: 'x',
                     start: function() {
-                        gradx.current_slider_id = "." + this.data('slider-id;'); //got full jQuery power here !
+                        gradx.current_slider_id = "." + $(this).data('slider-id'); //got full jQuery power here !
                     },
                     drag: function() {
-
                         gradx.update_style_array();
                         gradx.apply_style(gradx.panel, gradx.get_style_value());
                         var left = gradx.$container.find(gradx.current_slider_id).css("left");
 
+                        // if (parseInt(left) > 120) {
+                        //     left = "272px";
+                        // } else {
+                        //     left = "120px";
+                        // }
 
                         if (parseInt(left) > 26 && parseInt(left) < 426) {
-                            this.$container.find(".gradx_slider_info") //info element cached before
-                                    .css("left", left)
-                                    .show();
+                            gradx.$container.find(".gradx_slider_info") //info element cached before
+                            .css("left", left)
+                            .show();
+                        }
 
-                        } /*else {
-                         if (parseInt(left) > 120) {
-                         left = "272px";
-                         } else {
-                         left = "120px";
-                         }
-
-                         this.$container.find(".gradx_slider_info") //info element cached before
-                         .css("left", left)
-                         .show();
-
-                         }*/
                         var color = gradx.$container.find(gradx.current_slider_id).css("backgroundColor");
-                        //but what happens if @color is not in RGB ? :(
+                        // TODO - handle non RGB colors
                         var rgb = gradx.get_rgb_obj(color);
                         gradx.cp.spectrum("set", rgb);
-
                     }
                 }).click(function() {
                     gradx.load_info(this);
