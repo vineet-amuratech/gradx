@@ -1,4 +1,3 @@
-;
 
 /*
  *
@@ -60,7 +59,7 @@ var gradX = function(container, _options) {
     };
 
     //make global
-    gradx = {
+    var gradx = {
         rand_RGB: [],
         rand_pos: [],
         id: null,
@@ -276,20 +275,18 @@ var gradX = function(container, _options) {
                 ];
             }
 
-            obj = sliders;
+            for (k in sliders) {
 
-            for (k in obj) {
-
-                if (typeof obj[k].position === "undefined")
+                if (typeof sliders[k].position === "undefined")
                     break;
 
                 //convert % to px based on containers width
-                position = parseInt((obj[k].position * this.container_width) / 100) + this.min_width + "px";
+                position = parseInt((sliders[k].position * this.container_width) / 100) + this.min_width + "px";
 
                 slider_id = "gradx_slider_" + this.slider_index; //create an id for this slider
                 this.sliders.push([
-                    obj[k].color,
-                    obj[k].position
+                    sliders[k].color,
+                    sliders[k].position
                 ]);
 
                 this.slider_ids.push(slider_id); // for reference wrt to id
@@ -297,7 +294,7 @@ var gradX = function(container, _options) {
                 var slider = "<div class='gradx_slider " + slider_id + "' data-slider-id='" + slider_id + "'></div>";
                 this.$container.find(".gradx_start_sliders_" + this.id).append(slider);
 
-                this.$container.find("."+slider_id).css("backgroundColor", obj[k].color).css("left", position);
+                this.$container.find("."+slider_id).css("backgroundColor", sliders[k].color).css("left", position);
                 this.slider_index++;
             }
 
@@ -418,7 +415,14 @@ var gradX = function(container, _options) {
         },
         load_gradx: function($container, sliders) {
             this.$container = $container;
-            var id = this.id = gradx.get_random_number();
+
+            var gradx_id = this.$container.data('gradx-id');
+            if(gradx_id != null || gradx_id != undefined){
+                throw 'Gradx is already initialized for this container';
+            }
+            this.$container.data('gradx-id', this.id);
+
+            this.id = gradx.get_random_number();
 
             this.current_slider_id = false;
             var html = "<div class='gradx'>\n\
@@ -449,11 +453,11 @@ var gradX = function(container, _options) {
                                     </select>\n\
                             </div>\n\
                         </div>\n\
-                        <div class='gradx_container gradx_" + id + "'>\n\
-                            <div class='gradx_stop_sliders_" + id + "'></div>\n\
-                            <div class='gradx_panel gradx_panel_" + id + "'></div>\n\
+                        <div class='gradx_container gradx_" + this.id + "'>\n\
+                            <div class='gradx_stop_sliders_" + this.id + "'></div>\n\
+                            <div class='gradx_panel gradx_panel_" + this.id + "'></div>\n\
                             <div class='gradx_start_sliders_container'>\n\
-                                <div class='gradx_start_sliders gradx_start_sliders_" + id + "'></div>\n\
+                                <div class='gradx_start_sliders gradx_start_sliders_" + this.id + "'></div>\n\
                             </div>\n\
                             <div class='cp-default gradx_slider_info'>\n\
                                 <div class='gradx_slider_controls'>\n\
@@ -465,8 +469,7 @@ var gradX = function(container, _options) {
                     </div>";
 
             this.$container.html(html);
-            this.$container.find('.gradx').css('width', gradx.width).css('height', gradx.height).data('gradx-id',id);
-
+            this.$container.find('.gradx').css('width', gradx.width).css('height', gradx.height);
 
             //generates html to select the different gradient sizes
             // *only available for radial gradients
@@ -481,8 +484,8 @@ var gradX = function(container, _options) {
 
             //cache divs for fast reference
 
-            // this.container = this.$container.find(".gradx_" + id);
-            this.panel = this.$container.find(".gradx_panel_" + id);
+            // this.container = this.$container.find(".gradx_" + this.id);
+            this.panel = this.$container.find(".gradx_panel_" + this.id);
             // this.height = 86;
 
             this.container_width = this.$container.find(".gradx_container").width();
@@ -491,7 +494,7 @@ var gradX = function(container, _options) {
             this.add_slider(sliders);
 
             gradx.add_event(document, 'click', function() {
-                if (!gradx.slider_hovered[id]) {
+                if (!gradx.slider_hovered[this.id]) {
                     gradx.$container.find(".gradx_slider_info").hide();
                     return false;
                 }
@@ -517,12 +520,12 @@ var gradX = function(container, _options) {
                 if(gradx.slider_ids.length > 1){
                     gradx.$container.find(gradx.current_slider_id).remove();
                     gradx.$container.find(".gradx_slider_info").hide();
-                    var id = gradx.current_slider_id.replace(".", "");
+                    var current_slider_id = gradx.current_slider_id.replace(".", "");
 
                     //remove all references from array for current deleted slider
 
                     for (var i = 0; i < gradx.slider_ids.length; i++) {
-                        if (gradx.slider_ids[i] == id) {
+                        if (gradx.slider_ids[i] == current_slider_id) {
                             gradx.slider_ids.splice(i, 1);
                         }
                     }
@@ -626,13 +629,14 @@ var gradX = function(container, _options) {
             });
 
             this.$container.on('mouseout', '.gradx_slider_info', function() {
-                gradx.slider_hovered[id] = false;
+                gradx.slider_hovered[this.id] = false;
             });
 
             this.$container.on('mouseover', '.gradx_slider_info', function() {
-                gradx.slider_hovered[id] = true;
+                gradx.slider_hovered[this.id] = true;
             });
 
+            this.$container.data('gradx-id', this.id);
         }
 
     };
