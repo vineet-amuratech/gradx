@@ -245,7 +245,7 @@ var gradX = function(container, _options) {
             this.current_slider_id = "." + $(ele).data('slider-id');
             //check if current clicked element is an slider
             if (this.slider_ids.indexOf($(ele).data('slider-id')) != -1) {
-                var color = this.$container.css("backgroundColor");
+                var color = this.$container.find(this.current_slider_id).css("backgroundColor");
                 //but what happens if @color is not in RGB ? :(
                 var rgb = this.get_rgb_obj(color);
 
@@ -303,7 +303,7 @@ var gradX = function(container, _options) {
 
             for (var i = 0, len = this.slider_ids.length; i < len; i++) {
                 gradx.$container.find('.' + this.slider_ids[i]).draggable({
-                    containment: 'parent',
+                    containment: '.gradx_start_sliders', // 'parent'
                     axis: 'x',
                     start: function() {
                         gradx.current_slider_id = "." + $(this).data('slider-id'); //got full jQuery power here !
@@ -330,7 +330,6 @@ var gradX = function(container, _options) {
                     return false;
                 });
             }
-
 
         },
         set_colorpicker: function(clr) {
@@ -487,7 +486,7 @@ var gradX = function(container, _options) {
             // this.height = 86;
 
             this.container_width = this.$container.find(".gradx_container").width();
-            this.min_width = this.$container.find(".gradx_container").offset().left;
+            this.min_width = 0; // this.$container.find(".gradx_container").offset().left;
 
             this.add_slider(sliders);
 
@@ -512,7 +511,7 @@ var gradX = function(container, _options) {
             gradx.cp = this.$container.find('.gradx_slider_content');
 
             //call the colorpicker plugin
-            gradx.set_colorpicker("blue");
+            gradx.set_colorpicker();
 
             this.$container.find('.gradx_delete_slider').click(function() {
                 if(gradx.slider_ids.length > 1){
