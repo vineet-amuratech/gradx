@@ -722,7 +722,7 @@ var gradX = function(container, _options) {
         gradx[k] = options[k];
     }
 
-    if(gradx.default_value == undefined || gradx.default_value == null && (gradx.$target != undefined && gradx.$target != null)){
+    if((gradx.default_value == undefined || gradx.default_value == null) && (gradx.$target != undefined && gradx.$target != null)){
         gradx.default_value = gradx.$target.css('background-image');
         gradx.raw_default_value = gradx.default_value;
         gradx.default_value = parseGradient(gradx.default_value);
