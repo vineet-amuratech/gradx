@@ -53,6 +53,7 @@ var gradX = function(container, _options) {
         width: '300px',
         height: '130px',
         debug: false,
+        default_value: null,
         change: function(sliders, styles) {
             //nothing to do here by default
         }
@@ -150,11 +151,12 @@ var gradX = function(container, _options) {
                 css += "background: " + values[len] + ";\n";
             }
 
-            //call the userdefined change function
+            //call the user defined change function
             this.change(this.sliders, values);
             this.update_target(values);
 
-            if(this.debug == true){
+            if(this.debug){
+                console.log('gradient : ', values);
             }
         },
         //on load
@@ -263,16 +265,24 @@ var gradX = function(container, _options) {
             var slider_id, slider, k, position, value, delta;
 
             if (sliders.length === 0) {
-                sliders = [//default sliders
-                    {
+                // TODO - if default_value given parse it
+
+                if(this.default_value != null && this.default_value != undefined){
+                    for(var i=0;i<this.default_value.color_stops.length;i++){
+                        sliders.push({
+                            color: this.default_value.color_stops[i].color,
+                            position: this.default_value.color_stops[i].position
+                        });
+                    }
+                }else{
+                    sliders = [{
                         color: gradx.get_random_rgb(),
                         position: gradx.get_random_position() //x percent of gradient panel(400px)
-                    },
-                    {
+                    },{
                         color: gradx.get_random_rgb(),
                         position: gradx.get_random_position()
-                    }
-                ];
+                    }];
+                }
             }
 
             for (k in sliders) {
@@ -418,7 +428,7 @@ var gradX = function(container, _options) {
 
             var gradx_id = this.$container.data('gradx-id');
             if(gradx_id != null || gradx_id != undefined){
-                throw 'Gradx is already initialized for this container';
+                throw new Error('Gradx is already initialized for this container');
             }
             this.$container.data('gradx-id', this.id);
 
@@ -483,10 +493,7 @@ var gradX = function(container, _options) {
 
 
             //cache divs for fast reference
-
-            // this.container = this.$container.find(".gradx_" + this.id);
             this.panel = this.$container.find(".gradx_panel_" + this.id);
-            // this.height = 86;
 
             this.container_width = this.$container.find(".gradx_container").width();
             this.min_width = 0; // this.$container.find(".gradx_container").offset().left;
@@ -641,7 +648,35 @@ var gradX = function(container, _options) {
 
     };
 
+    function parseGradient(raw_gradient){
+        try{
+            var grad_split = raw_gradient.split(/gradient/i);
+            var type = grad_split[0];
+            type = type.replace(/-webkit-|-moz-|-ms-|-o-/i, '').replace('-','');
 
+            var values = grad_split[1];
+            var direction = values.slice(1, values.indexOf(','));
+            var raw_color_stops = values.slice(values.indexOf(','), values.length-1);
+            var split_raw_color_stops = raw_color_stops.match(/rgb\([ ]?\d+,[ ]?\d+,[ ]?\d+\)[ ]?\d+\%/gi);
+
+            var color_stops = [];
+
+            for(var i=0;i<split_raw_color_stops.length;i++){
+                var raw_color_stop = split_raw_color_stops[i];
+                var color = raw_color_stop.match(/rgb\([ ]?\d+,[ ]?\d+,[ ]?\d+\)/i)[0];
+                var position = raw_color_stop.match(/[\d]+%/i)[0];
+                position = position.replace('%','');
+                position = parseInt(position);
+
+                color_stops.push({color: color, position: position});
+            }
+
+            return {type: type, direction: direction, color_stops: color_stops}
+        }catch(e){
+            console.log(e.message);
+            throw new Error('Invalid gradient value', raw_gradient);
+        }
+    }
 
     function  add_event(element, event, event_function)
     {
@@ -686,6 +721,15 @@ var gradX = function(container, _options) {
         //load the options into gradx object
         gradx[k] = options[k];
     }
+
+    if(gradx.default_value == undefined || gradx.default_value == null && (gradx.$target != undefined && gradx.$target != null)){
+        gradx.default_value = gradx.$target.css('background-image');
+        gradx.raw_default_value = gradx.default_value;
+        gradx.default_value = parseGradient(gradx.default_value);
+        gradx.type = gradx.default_value.type;
+        gradx.direction = gradx.default_value.direction;
+    }
+
 
     gradx.load_gradx(options.$container, gradx.sliders);
     gradx.apply_default_styles();

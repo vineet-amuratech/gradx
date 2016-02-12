@@ -12,10 +12,15 @@
         <!-- <script src="js/dom-drag.js"></script> -->
         <script src="js/jquery-ui.js"></script>
         <script src="js/bootstrap.js"></script>
+
+        <!-- https://github.com/rafaelcaricio/gradient-parser -->
+        <!-- <script src="js/gradient-parser.js"></script> -->
+
+        <!-- http://codologic.com/page/gradx-jquery-javascript-gradient-selector-library -->
         <script src="js/gradX.js"></script>
 
         <style>
-            .target_text {
+            #target_text {
                 margin: 0px auto;
                 margin-top: 40%;
                 background: #f8f8f8;
@@ -25,40 +30,42 @@
                 border-radius: 2px;
                 color: #111;
             }
-
-            .target {
+            #target {
                 border: 1px solid;
                 margin: 0px 10%;
                 width: 150px;
                 height: 150px;
-            }
-            #target {
-                border-radius: 150px;
+                background-image: -webkit-linear-gradient(right, rgb(248, 6, 111) 14%, rgb(202, 74, 208) 71%);
+
+                /*background-image: -webkit-linear-gradient(right , rgba(248, 6, 111, 10) 71% , rgba(202, 74, 208, 10) 78%), -webkit-linear-gradient(top , rgba(248, 6, 234, 10) 71% , rgba(202, 74, 208, 10) 78%);*/
+
+                /*background-image: -webkit-linear-gradient(right , rgb(248, 6, 234) 71% , rgb(202, 74, 208) 78%), url('http://snook.ca/img/logo-bookmark.png'), url('https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSVwPhcDMliB8N9CFuYbaG2vDatFMYSdar40GBloP7WcMtB8ZsC');*/
             }
         </style>
     </head>
 
 
     <body>
-        <div class='row'>
-            <div class='col-md-offset-1 col-md-3'>
-                <div class="target" id="target"><div class="target_text">Target #1</div></div>
-            </div>
-            <div class='col-md-offset-1 col-md-3'>
-                <div class="target" id="target2"><div class="target_text">Target #2</div></div>
-            </div>
-            <div class='col-md-4'>
-                <div id="gradX" ></div>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-md-offset-1 col-md-3'>
+                    <div id="target"><div id="target_text">Target #1</div></div>
+                </div>
+                <div class='col-md-4'>
+                    <div id="gradX" ></div>
+                </div>
             </div>
         </div>
-
         <script>
-            gradX("#gradX", {
-                target: $(".target"),
-                // debug: true,
-                change: function(sliders, styles){
-                    // console.log('change : ', styles)
-                }
+            $(function(){
+                gradX("#gradX", {
+                    target: $("#target"),
+                    cross_browser: false,
+                    // debug: true,
+                    change: function(sliders, styles){
+                        console.log('change : ', styles[styles.length-1])
+                    }
+                });
             });
         </script>
 
