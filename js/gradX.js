@@ -648,6 +648,7 @@ var gradX = function(container, _options) {
 
     function parseGradient(raw_gradient){
         try{
+            raw_gradient = raw_gradient.replace(/\s/,'');
             var grad_split = raw_gradient.split(/gradient/i);
             var type = grad_split[0];
             type = type.replace(/-webkit-|-moz-|-ms-|-o-/i, '').replace('-','');
