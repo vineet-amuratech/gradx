@@ -112,7 +112,7 @@ var gradX = function(container, _options) {
         },
         //if target element is specified the target's style (background) is updated
         update_target: function(values) {
-            if(this.$target != undefined){
+            if(!$.isEmptyObject(this.$target)){
                 var i, v_len = values.length;
                 for (i = 0; i < v_len; i++) {
                     this.$target.css("background-image", values[i]);
@@ -263,7 +263,7 @@ var gradX = function(container, _options) {
             var slider_id, slider, k, position, value, delta;
 
             if (sliders.length === 0) {
-                if(this.parsed_default_value != null && this.parsed_default_value != undefined){
+                if(!$.isEmptyObject(this.parsed_default_value)){
                     for(var i=0;i<this.parsed_default_value.color_stops.length;i++){
                         sliders.push({
                             color: this.parsed_default_value.color_stops[i].color,
@@ -272,10 +272,10 @@ var gradX = function(container, _options) {
                     }
 
                     this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
-                    if(this.sub_direction != null && this.sub_direction != undefined){
+                    if(!$.isEmptyObject(this.sub_direction)){
                         this.$container.find('.gradx_gradient_subtype2').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
                     }
-                    if(this.sub_shape != null && this.sub_shape != undefined){
+                    if(!$.isEmptyObject(this.sub_shape)){
                         this.$container.find('.gradx_gradient_subtype').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
                     }
 
@@ -413,7 +413,7 @@ var gradX = function(container, _options) {
             this.$container = $container;
 
             var gradx_id = this.$container.data('gradx-id');
-            if(gradx_id != null || gradx_id != undefined){
+            if(!$.isEmptyObject(gradx_id)){
                 throw new Error('Gradx is already initialized for this container');
             }
             this.$container.data('gradx-id', this.id);
@@ -537,11 +537,11 @@ var gradX = function(container, _options) {
                 var type = gradx.gx(this).val(), options, option_str = '';
 
                 if (type !== "linear") {
-                    gradx.$container.find('.gradx_radial_gradient_size').show();
-                    gradx.$container.find('.gradx_gradient_subtype2').show()
+                    gradx.$container.find('.gradx_radial_gradient_size').removeClass('hidden');
+                    gradx.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
                 } else {
-                    gradx.$container.find('.gradx_radial_gradient_size').hide();
-                    gradx.$container.find('.gradx_gradient_subtype2').hide();
+                    gradx.$container.find('.gradx_radial_gradient_size').addClass('hidden');
+                    gradx.$container.find('.gradx_gradient_subtype2').addClass('hidden');
                 }
 
                 gradx.type = type;
@@ -550,10 +550,10 @@ var gradX = function(container, _options) {
                 gradx.apply_style(gradx.panel, gradx.get_style_value());
             });
 
-            //change type onload userdefined
+            //change type onload user defined
             if (this.type !== "linear") {
                 this.$container.find('.gradx_gradient_type').val(this.type);
-                this.$container.find('.gradx_gradient_subtype2').show()
+                this.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
 
                 var h, v;
 
@@ -665,7 +665,7 @@ var gradX = function(container, _options) {
 
                 var position = '';
                 var raw_position = raw_color_stop.match(/[\d]+%/i);
-                if(raw_position != null && raw_position != undefined && raw_position.length == 1){
+                if(!$.isEmptyObject(raw_position) && raw_position.length == 1){
                     position = raw_position[0];
                     position = position.replace('%','');
                     position = parseInt(position);
@@ -700,7 +700,7 @@ var gradX = function(container, _options) {
     //apply options to gradx object
 
     // initialize $target
-    if(options.target != null || options.target != undefined){
+    if(!$.isEmptyObject(options.target)){
         if(typeof(options.target) == 'string'){
             options.$target = gradx.gx(options.target);
         }else if(options.target instanceof(jQuery)){
@@ -716,7 +716,7 @@ var gradX = function(container, _options) {
         options.$container = container;
     }
 
-    if(options.$container == undefined || options.$container == null || options.$container.length == 0){
+    if($.isEmptyObject(options.target) || options.$container.length == 0){
         throw 'container invalid';
     }
 
@@ -725,11 +725,11 @@ var gradX = function(container, _options) {
         gradx[k] = options[k];
     }
 
-    if((gradx.default_value == undefined || gradx.default_value == null) && (gradx.$target != undefined && gradx.$target != null)){
+    if($.isEmptyObject(gradx.default_value) && (!$.isEmptyObject(gradx.$target))){
         gradx.default_value = gradx.$target.css('background-image');
     }
 
-    if(gradx.default_value != undefined && gradx.default_value != null && gradx.default_value != 'none'){
+    if(!$.isEmptyObject(gradx.default_value) && gradx.default_value != 'none'){
         gradx.parsed_default_value = parseGradient(gradx.default_value);
         if(gradx.debug){
             console.log('default gradient : ', gradx.parsed_default_value);
