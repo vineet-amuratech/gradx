@@ -510,47 +510,6 @@ var gradX = function(container, _options) {
             //call the colorpicker plugin
             gradx.set_colorpicker();
 
-            this.$container.find('.gradx_delete_slider').click(function() {
-                if(gradx.slider_ids.length > 1){
-                    gradx.$container.find(gradx.current_slider_id).remove();
-                    gradx.$container.find(".gradx_slider_info").hide();
-                    var current_slider_id = gradx.current_slider_id.replace(".", "");
-
-                    //remove all references from array for current deleted slider
-
-                    for (var i = 0; i < gradx.slider_ids.length; i++) {
-                        if (gradx.slider_ids[i] == current_slider_id) {
-                            gradx.slider_ids.splice(i, 1);
-                        }
-                    }
-
-                    //apply modified style after removing the slider
-                    gradx.apply_default_styles();
-
-                    gradx.current_slider_id = false; //no slider is selected
-                }else{
-                    alert('Atleast one stop is required to generate a gradient');
-                }
-            });
-
-            this.$container.find('.gradx_gradient_type').change(function() {
-
-                var type = gradx.gx(this).val(), options, option_str = '';
-
-                if (type !== "linear") {
-                    // gradx.$container.find('.gradx_radial_gradient_sub_shape').removeClass('hidden');
-                    gradx.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
-                } else {
-                    // gradx.$container.find('.gradx_radial_gradient_sub_shape').addClass('hidden');
-                    gradx.$container.find('.gradx_gradient_subtype2').addClass('hidden');
-                }
-
-                gradx.type = type;
-                gradx.direction = gradx.$container.find('.gradx_gradient_subtype').val();
-
-                gradx.apply_style(gradx.panel, gradx.get_style_value());
-            });
-
             //change type onload user defined
             if (this.type !== "linear") {
                 this.$container.find('.gradx_gradient_type').val(this.type);
@@ -589,6 +548,46 @@ var gradX = function(container, _options) {
                     this.$container.find('.gradx_gradient_subtype').val(this.direction);
                 }
             }
+
+            this.$container.find('.gradx_delete_slider').click(function() {
+                if(gradx.slider_ids.length > 1){
+                    gradx.$container.find(gradx.current_slider_id).remove();
+                    gradx.$container.find(".gradx_slider_info").hide();
+                    var current_slider_id = gradx.current_slider_id.replace(".", "");
+
+                    //remove all references from array for current deleted slider
+
+                    for (var i = 0; i < gradx.slider_ids.length; i++) {
+                        if (gradx.slider_ids[i] == current_slider_id) {
+                            gradx.slider_ids.splice(i, 1);
+                        }
+                    }
+
+                    //apply modified style after removing the slider
+                    gradx.apply_default_styles();
+
+                    gradx.current_slider_id = false; //no slider is selected
+                }else{
+                    alert('Atleast one stop is required to generate a gradient');
+                }
+            });
+
+            this.$container.find('.gradx_gradient_type').change(function() {
+                var options, option_str = '';
+                gradx.type = gradx.gx(this).val();
+
+                if (gradx.type !== "linear") {
+                    // gradx.$container.find('.gradx_radial_gradient_sub_shape').removeClass('hidden');
+                    gradx.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
+                } else {
+                    // gradx.$container.find('.gradx_radial_gradient_sub_shape').addClass('hidden');
+                    gradx.$container.find('.gradx_gradient_subtype2').addClass('hidden');
+                }
+
+                gradx.direction = gradx.$container.find('.gradx_gradient_subtype').val();
+
+                gradx.apply_style(gradx.panel, gradx.get_style_value());
+            });
 
             this.$container.find('.gradx_gradient_subtype').change(function() {
 
@@ -743,8 +742,14 @@ var gradX = function(container, _options) {
         gradx.direction = gradx.parsed_default_value.direction;
         gradx.sub_direction = gradx.parsed_default_value.sub_direction;
         gradx.sub_direction = gradx.parsed_default_value.sub_direction;
-        gradx.shape = gradx.parsed_default_value.shape;
-        gradx.sub_shape = gradx.parsed_default_value.sub_shape;
+
+
+        if(!$.isEmptyObject(gradx.parsed_default_value.shape)){
+            gradx.shape = gradx.parsed_default_value.shape;
+        }
+        if(!$.isEmptyObject(gradx.parsed_default_value.sub_shape)){
+            gradx.sub_shape = gradx.parsed_default_value.sub_shape;
+        }
     }
 
     gradx.load_gradx(options.$container, gradx.sliders);
