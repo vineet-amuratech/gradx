@@ -265,13 +265,11 @@ var gradX = function(container, _options) {
             var slider_id, slider, k, position, value, delta;
 
             if (sliders.length === 0) {
-                // TODO - if default_value given parse it
-
-                if(this.default_value != null && this.default_value != undefined){
-                    for(var i=0;i<this.default_value.color_stops.length;i++){
+                if(this.parsed_default_value != null && this.parsed_default_value != undefined){
+                    for(var i=0;i<this.parsed_default_value.color_stops.length;i++){
                         sliders.push({
-                            color: this.default_value.color_stops[i].color,
-                            position: this.default_value.color_stops[i].position
+                            color: this.parsed_default_value.color_stops[i].color,
+                            position: this.parsed_default_value.color_stops[i].position
                         });
                     }
                 }else{
@@ -724,12 +722,13 @@ var gradX = function(container, _options) {
 
     if((gradx.default_value == undefined || gradx.default_value == null) && (gradx.$target != undefined && gradx.$target != null)){
         gradx.default_value = gradx.$target.css('background-image');
-        gradx.raw_default_value = gradx.default_value;
-        gradx.default_value = parseGradient(gradx.default_value);
-        gradx.type = gradx.default_value.type;
-        gradx.direction = gradx.default_value.direction;
     }
 
+    if(gradx.default_value != undefined && gradx.default_value != null){
+        gradx.parsed_default_value = parseGradient(gradx.default_value);
+        gradx.type = gradx.parsed_default_value.type;
+        gradx.direction = gradx.parsed_default_value.direction;
+    }
 
     gradx.load_gradx(options.$container, gradx.sliders);
     gradx.apply_default_styles();
