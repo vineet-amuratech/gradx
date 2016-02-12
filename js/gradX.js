@@ -46,6 +46,7 @@ var gradX = function(container, _options) {
         target: null, // string / jquery selector
         sliders: [],
         direction: 'left',
+        sub_direction: 'left',
         //if linear left | top | right | bottom
         //if radial left | center | right , top | center | bottom
         type: 'linear', //linear | circle | ellipse
@@ -68,6 +69,7 @@ var gradX = function(container, _options) {
         slider_index: 0, //global index for sliders
         sliders: [], //contains styles of each slider
         direction: "left", //direction of gradient or position of centre in case of radial gradients
+        sub_direction: 'left',
         type: "linear", //linear or radial
         shape: "cover", //radial gradient size
         slider_hovered: [],
@@ -192,9 +194,8 @@ var gradX = function(container, _options) {
 
             if (len === 1) {
                 //since only one slider , so simple background
-
                 style_str = this.sliders[0][0];
-                style_str = this.direction + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%") + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%"); //add direction for gradient
+                style_str = this.direction + " " + this.sub_direction + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%") + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%"); //add direction for gradient
             } else {
                 var style_str = "", suffix = "";
                 for (var i = 0; i < len; i++) {
@@ -216,7 +217,7 @@ var gradX = function(container, _options) {
                     style_str = this.direction + " , " + style_str; //add direction for gradient
                 } else {
                     //position, type size, [color stoppers]
-                    style_str = this.direction + " , " + this.type + " " + this.shape + " , " + style_str;
+                    style_str = this.direction + " " + this.sub_direction + " , " + this.type + " " + this.shape + " , " + style_str;
                 }
             }
 
@@ -270,15 +271,6 @@ var gradX = function(container, _options) {
                             position: this.parsed_default_value.color_stops[i].position
                         });
                     }
-
-                    this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
-                    if(!$.isEmptyObject(this.sub_direction) && this.sub_direction != ''){
-                        this.$container.find('.gradx_gradient_subtype2').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
-                    }
-                    if(!$.isEmptyObject(this.sub_shape) && this.sub_shape != ''){
-                        this.$container.find('.gradx_radial_gradient_sub_shape').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
-                    }
-
                 }else{
                     sliders = [{
                         color: gradx.get_random_rgb(),
@@ -510,35 +502,17 @@ var gradX = function(container, _options) {
             //call the colorpicker plugin
             gradx.set_colorpicker();
 
-            //change type onload user defined
+            // change type onload user defined
+
+            this.$container.find('.gradx_gradient_type').val(this.type);
+            this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
             if (this.type !== "linear") {
-                this.$container.find('.gradx_gradient_type').val(this.type);
-                this.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
-
-                var h, v;
-
-                if (this.direction !== 'left') {
-                    //user has passed his own direction
-                    var center;
-                    if (this.direction.indexOf(",") > -1) {
-                        center = this.direction.split(",");
-                    } else {
-                        //tolerate user mistakes
-                        center = this.direction.split(" ");
-                    }
-
-                    h = center[0];
-                    v = center[1];
-
-                    //update the center points in the corr. select boxes
-                    this.$container.find('.gradx_gradient_subtype').val(h);
-                    this.$container.find('.gradx_gradient_subtype2').val(v);
-                } else {
-                    var h = this.$container.find('.gradx_gradient_subtype').val();
-                    var v = this.$container.find('.gradx_gradient_subtype2').val();
+                if(!$.isEmptyObject(this.sub_direction) && this.sub_direction != ''){
+                    this.$container.find('.gradx_gradient_subtype2').removeClass('hidden').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
                 }
-
-                gradx.direction = h + " " + v;
+                if(!$.isEmptyObject(this.sub_shape) && this.sub_shape != ''){
+                    this.$container.find('.gradx_radial_gradient_sub_shape').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
+                }
 
                 gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
             } else {
@@ -578,6 +552,7 @@ var gradX = function(container, _options) {
 
                 if (gradx.type !== "linear") {
                     // gradx.$container.find('.gradx_radial_gradient_sub_shape').removeClass('hidden');
+                    // gradx.sub_direction = '';
                     gradx.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
                 } else {
                     // gradx.$container.find('.gradx_radial_gradient_sub_shape').addClass('hidden');
@@ -590,23 +565,13 @@ var gradX = function(container, _options) {
             });
 
             this.$container.find('.gradx_gradient_subtype').change(function() {
-
-                if (gradx.type === 'linear') {
-                    gradx.direction = gradx.gx(this).val();
-                } else {
-                    var h = gradx.gx(this).val();
-                    var v = gradx.$container.find('.gradx_gradient_subtype2').val();
-                    gradx.direction = h + " " + v;
-                }
+                gradx.direction = gradx.gx(this).val();
                 gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
 
             });
 
             this.$container.find('.gradx_gradient_subtype2').change(function() {
-
-                var h = gradx.$container.find('.gradx_gradient_subtype').val();
-                var v = gradx.gx(this).val();
-                gradx.direction = h + " " + v;
+                gradx.sub_direction = gradx.gx(this).val();
                 gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
 
             });
