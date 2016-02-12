@@ -21,7 +21,6 @@
 
 'use strict';
 
-
 // //make me jquery UI  independent
 // if (typeof jQuery.fn.draggable === "undefined") {
 //      var MIN_WIDTH = 26, // this.panel.offset().left;
@@ -478,6 +477,34 @@ var gradX = function(container, _options) {
             this.min_width = 0; // this.$container.find(".gradx_container").offset().left;
 
             this.add_slider(sliders);
+            //cache the element
+            gradx.cp = this.$container.find('.gradx_slider_content');
+
+            //call the colorpicker plugin
+            gradx.set_colorpicker();
+
+            // change type onload user defined
+
+            this.$container.find('.gradx_gradient_type').find('option[value='+this.type+']').attr('selected', 'selected');
+            this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
+            if (this.type !== "linear") {
+                this.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
+
+                if(!$.isEmptyObject(this.sub_direction) && this.sub_direction != ''){
+                    this.$container.find('.gradx_gradient_subtype2').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
+                }
+                if(!$.isEmptyObject(this.sub_shape) && this.sub_shape != ''){
+                    this.$container.find('.gradx_radial_gradient_sub_shape').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
+                }
+
+                gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
+            } else {
+
+                //change direction if not left
+                if (this.direction !== 'left') {
+                    this.$container.find('.gradx_gradient_subtype').val(this.direction);
+                }
+            }
 
             gradx.add_event(document, 'click', function() {
                 if (!gradx.slider_hovered[this.id]) {
@@ -495,33 +522,6 @@ var gradX = function(container, _options) {
                 ]);
                 gradx.apply_default_styles();
             });
-
-            //cache the element
-            gradx.cp = this.$container.find('.gradx_slider_content');
-
-            //call the colorpicker plugin
-            gradx.set_colorpicker();
-
-            // change type onload user defined
-
-            this.$container.find('.gradx_gradient_type').val(this.type);
-            this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
-            if (this.type !== "linear") {
-                if(!$.isEmptyObject(this.sub_direction) && this.sub_direction != ''){
-                    this.$container.find('.gradx_gradient_subtype2').removeClass('hidden').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
-                }
-                if(!$.isEmptyObject(this.sub_shape) && this.sub_shape != ''){
-                    this.$container.find('.gradx_radial_gradient_sub_shape').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
-                }
-
-                gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
-            } else {
-
-                //change direction if not left
-                if (this.direction !== 'left') {
-                    this.$container.find('.gradx_gradient_subtype').val(this.direction);
-                }
-            }
 
             this.$container.find('.gradx_delete_slider').click(function() {
                 if(gradx.slider_ids.length > 1){
@@ -552,7 +552,7 @@ var gradX = function(container, _options) {
 
                 if (gradx.type !== "linear") {
                     // gradx.$container.find('.gradx_radial_gradient_sub_shape').removeClass('hidden');
-                    // gradx.sub_direction = '';
+                    gradx.sub_direction = '';
                     gradx.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
                 } else {
                     // gradx.$container.find('.gradx_radial_gradient_sub_shape').addClass('hidden');
