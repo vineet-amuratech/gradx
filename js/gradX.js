@@ -272,10 +272,10 @@ var gradX = function(container, _options) {
                     }
 
                     this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
-                    if(!$.isEmptyObject(this.sub_direction)){
+                    if(!$.isEmptyObject(this.sub_direction) && this.sub_direction != ''){
                         this.$container.find('.gradx_gradient_subtype2').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
                     }
-                    if(!$.isEmptyObject(this.sub_shape)){
+                    if(!$.isEmptyObject(this.sub_shape) && this.sub_shape != ''){
                         this.$container.find('.gradx_radial_gradient_sub_shape').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
                     }
 
@@ -717,7 +717,7 @@ var gradX = function(container, _options) {
         options.$container = container;
     }
 
-    if($.isEmptyObject(options.target) || options.$container.length == 0){
+    if($.isEmptyObject(options.$container) || options.$container.length == 0){
         throw 'container invalid';
     }
 
