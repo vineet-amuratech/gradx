@@ -710,7 +710,7 @@ var gradX = function(container, _options) {
 
 
         if(!$.isEmptyObject(gradx.parsed_default_value.shape)){
-            gradx.shape = gradx.parsed_default_value.shape;
+            gradx.shape = gradx.parsed_default_value.sub_shape;
         }
         if(!$.isEmptyObject(gradx.parsed_default_value.sub_shape)){
             gradx.sub_shape = gradx.parsed_default_value.sub_shape;
