@@ -276,7 +276,7 @@ var gradX = function(container, _options) {
                         this.$container.find('.gradx_gradient_subtype2').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
                     }
                     if(!$.isEmptyObject(this.sub_shape)){
-                        this.$container.find('.gradx_gradient_subtype').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
+                        this.$container.find('.gradx_radial_gradient_sub_shape').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
                     }
 
                 }else{
@@ -449,7 +449,7 @@ var gradX = function(container, _options) {
                                         <option value='top'>Top</option>\n\
                                         <option value='bottom'>Bottom</option>\n\
                                     </select>\n\
-                                    <select class='form-control gradx-input-xs gradx_radial_gradient_size hidden'>\n\
+                                    <select class='form-control gradx-input-xs gradx_radial_gradient_sub_shape hidden'>\n\
                                         <option value='radial-shape' disabled>Radial Shape</option>\n\
                                         <option value='closest-side'>Closest Side</option>\n\
                                         <option value='closest-corner' selected>Closest Corner</option>\n\
@@ -476,6 +476,7 @@ var gradX = function(container, _options) {
                     </div>";
 
             this.$container.html(html);
+
             this.$container.find('.gradx').css('width', gradx.width).css('height', gradx.height);
 
             //cache divs for fast reference
@@ -537,10 +538,10 @@ var gradX = function(container, _options) {
                 var type = gradx.gx(this).val(), options, option_str = '';
 
                 if (type !== "linear") {
-                    gradx.$container.find('.gradx_radial_gradient_size').removeClass('hidden');
+                    // gradx.$container.find('.gradx_radial_gradient_sub_shape').removeClass('hidden');
                     gradx.$container.find('.gradx_gradient_subtype2').removeClass('hidden');
                 } else {
-                    gradx.$container.find('.gradx_radial_gradient_size').addClass('hidden');
+                    // gradx.$container.find('.gradx_radial_gradient_sub_shape').addClass('hidden');
                     gradx.$container.find('.gradx_gradient_subtype2').addClass('hidden');
                 }
 
@@ -612,7 +613,7 @@ var gradX = function(container, _options) {
             });
 
             //not visible
-            this.$container.find('.gradx_radial_gradient_size').change(function() {
+            this.$container.find('.gradx_radial_gradient_sub_shape').change(function() {
 
                 gradx.shape = gradx.gx(this).val();
                 gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
