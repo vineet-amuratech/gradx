@@ -121,7 +121,7 @@ var gradX = function(container, _options) {
             }
         },
         //apply styles on fly
-        apply_style: function(ele, value) {
+        apply_style: function(panel, value) {
             var type = 'linear';
 
             if (gradx.type != 'linear') {
@@ -146,7 +146,7 @@ var gradX = function(container, _options) {
 
             while (len > 0) {
                 len--;
-                ele.css("background", values[len]);
+                panel.css("background", values[len]);
                 css += "background: " + values[len] + ";\n";
             }
 
@@ -194,7 +194,7 @@ var gradX = function(container, _options) {
             if (len === 1) {
                 //since only one slider , so simple background
                 style_str = this.sliders[0][0];
-                style_str = this.direction + " " + this.sub_direction + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%") + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%"); //add direction for gradient
+                style_str = this.direction + (this.direction == this.sub_direction ? "" : " " + this.sub_direction) + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%") + " , " + (this.sliders[0][0] + " " + this.sliders[0][1] + "%"); //add direction for gradient
             } else {
                 var style_str = "", suffix = "";
                 for (var i = 0; i < len; i++) {
@@ -216,7 +216,7 @@ var gradX = function(container, _options) {
                     style_str = this.direction + " , " + style_str; //add direction for gradient
                 } else {
                     //position, type size, [color stoppers]
-                    style_str = this.direction + " " + this.sub_direction + " , " + this.type + " " + this.shape + " , " + style_str;
+                    style_str = this.direction + (this.direction == this.sub_direction ? "" : " " + this.sub_direction) + " , " + this.type + " " + this.shape + " , " + style_str;
                 }
             }
 
