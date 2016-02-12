@@ -35,7 +35,7 @@
                 margin: 0px 10%;
                 width: 150px;
                 height: 150px;
-                background-image: -webkit-linear-gradient(right, rgb(248, 6, 111) 14%, rgb(202, 74, 208) 71%);
+                /*background-image: -webkit-linear-gradient(right, rgb(248, 6, 111) 14%, rgb(202, 74, 208) 71%);*/
 
                 /*background-image: -webkit-linear-gradient(right , rgba(248, 6, 111, 10) 71% , rgba(202, 74, 208, 10) 78%), -webkit-linear-gradient(top , rgba(248, 6, 234, 10) 71% , rgba(202, 74, 208, 10) 78%);*/
 
@@ -46,6 +46,11 @@
 
 
     <body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
         <div class='container'>
             <div class='row'>
                 <div class='col-md-offset-1 col-md-3'>
@@ -61,10 +66,11 @@
                 gradX("#gradX", {
                     target: $("#target"),
                     cross_browser: false,
-                    default_value: '-webkit-linear-gradient(right, rgb(248, 6, 111) 14%, rgb(202, 74, 208) 71%)',
-                    // debug: true,
+                    // default_value: 'linear-gradient(left , rgb(220, 97, 247) 11% , rgb(228, 18, 53) 53%)',
+                    default_value: 'radial-gradient(left top , circle cover , rgb(242, 14, 239) 18% , rgb(53, 94, 173) 67%)',
+                    debug: true,
                     change: function(sliders, styles){
-                        console.log('change : ', styles[styles.length-1])
+                        // console.log('change : ', styles[styles.length-1])
                     }
                 });
             });

@@ -49,7 +49,6 @@ var gradX = function(container, _options) {
         //if linear left | top | right | bottom
         //if radial left | center | right , top | center | bottom
         type: 'linear', //linear | circle | ellipse
-        code_shown: false, //false | true
         width: '300px',
         height: '130px',
         debug: false,
@@ -72,9 +71,8 @@ var gradX = function(container, _options) {
         type: "linear", //linear or radial
         shape: "cover", //radial gradient size
         slider_hovered: [],
-        code_shown: false,
-        load_jQ: function() {
 
+        load_jQ: function() {
             //handle any library conflicts here
             this.gx = jQuery;
         },
@@ -272,6 +270,15 @@ var gradX = function(container, _options) {
                             position: this.parsed_default_value.color_stops[i].position
                         });
                     }
+
+                    this.$container.find('.gradx_gradient_subtype').find('option[value='+this.direction+']').attr('selected', 'selected');
+                    if(this.sub_direction != null && this.sub_direction != undefined){
+                        this.$container.find('.gradx_gradient_subtype2').find('option[value='+this.sub_direction+']').attr('selected', 'selected');
+                    }
+                    if(this.sub_shape != null && this.sub_shape != undefined){
+                        this.$container.find('.gradx_gradient_subtype').find('option[value='+this.sub_shape+']').attr('selected', 'selected');
+                    }
+
                 }else{
                     sliders = [{
                         color: gradx.get_random_rgb(),
@@ -283,18 +290,21 @@ var gradX = function(container, _options) {
                 }
             }
 
-            for (k in sliders) {
+            var sliders_dup = sliders;
+            this.sliders = [];
 
-                if (typeof sliders[k].position === "undefined")
+            for (k in sliders_dup) {
+
+                if (typeof sliders_dup[k].position === "undefined")
                     break;
 
                 //convert % to px based on containers width
-                position = parseInt((sliders[k].position * this.container_width) / 100) + this.min_width + "px";
+                position = parseInt((sliders_dup[k].position * this.container_width) / 100) + this.min_width + "px";
 
                 slider_id = "gradx_slider_" + this.slider_index; //create an id for this slider
                 this.sliders.push([
-                    sliders[k].color,
-                    sliders[k].position
+                    sliders_dup[k].color,
+                    sliders_dup[k].position
                 ]);
 
                 this.slider_ids.push(slider_id); // for reference wrt to id
@@ -302,7 +312,7 @@ var gradX = function(container, _options) {
                 var slider = "<div class='gradx_slider " + slider_id + "' data-slider-id='" + slider_id + "'></div>";
                 this.$container.find(".gradx_start_sliders_" + this.id).append(slider);
 
-                this.$container.find("."+slider_id).css("backgroundColor", sliders[k].color).css("left", position);
+                this.$container.find("."+slider_id).css("backgroundColor", sliders_dup[k].color).css("left", position);
                 this.slider_index++;
             }
 
@@ -365,9 +375,7 @@ var gradX = function(container, _options) {
                     str = '';
 
             for (var i = 0; i < len; i++) {
-
                 name = options[i].split(" ");
-
                 name = name[0];
 
                 if (i < 2) {
@@ -384,25 +392,6 @@ var gradX = function(container, _options) {
 
             return str;
         },
-        generate_radial_options: function() {
-
-            var options;
-            options = ["horizontal-center disabled", "center selected", "left", "right"];
-            this.$container.find('.gradx_gradient_subtype').html(gradx.generate_options(options));
-
-            options = ["vertical-center disabled", "center selected", "top", "bottom"];
-            this.$container.find('.gradx_gradient_subtype2').html(gradx.generate_options(options)).show();
-
-        },
-        generate_linear_options: function() {
-
-            var options;
-            options = ["horizontal-center disabled", "left selected", "right", "top", "bottom"];
-            this.$container.find('.gradx_gradient_subtype').html(gradx.generate_options(options));
-
-            this.$container.find('.gradx_gradient_subtype2').hide();
-
-        },
         destroy: function() {
             var options = {
                 target: null, // string / jquery selector
@@ -411,7 +400,6 @@ var gradX = function(container, _options) {
                 //if linear left | top | right | bottom
                 //if radial left | center | right , top | center | bottom
                 type: 'linear', //linear | circle | ellipse
-                code_shown: false, //false | true
                 change: function(sliders, styles) {
                     //nothing to do here by default
                 }
@@ -455,9 +443,20 @@ var gradX = function(container, _options) {
                                     </select>\n\
                             </div>\n\
                             <div class='col-sm-3 gradx-stripped-col'>\n\
-                                    <select class='form-control gradx-input-xs gradx_gradient_subtype2 gradx_hide'>\n\
+                                    <select class='form-control gradx-input-xs gradx_gradient_subtype2 hidden'>\n\
+                                        <option value='vertical-center' disabled>Vertical Center</option>\n\
+                                        <option value='center' selected>Center</option>\n\
+                                        <option value='top'>Top</option>\n\
+                                        <option value='bottom'>Bottom</option>\n\
                                     </select>\n\
-                                    <select class='form-control gradx-input-xs gradx_radial_gradient_size gradx_hide'>\n\
+                                    <select class='form-control gradx-input-xs gradx_radial_gradient_size hidden'>\n\
+                                        <option value='radial-shape' disabled>Radial Shape</option>\n\
+                                        <option value='closest-side'>Closest Side</option>\n\
+                                        <option value='closest-corner' selected>Closest Corner</option>\n\
+                                        <option value='farthest-side'>Farthest Side</option>\n\
+                                        <option value='farthest-corner'>Farthest Corner</option>\n\
+                                        <option value='contain'>Contain</option>\n\
+                                        <option value='cover'>Cover</option>\n\
                                     </select>\n\
                             </div>\n\
                         </div>\n\
@@ -478,17 +477,6 @@ var gradX = function(container, _options) {
 
             this.$container.html(html);
             this.$container.find('.gradx').css('width', gradx.width).css('height', gradx.height);
-
-            //generates html to select the different gradient sizes
-            // *only available for radial gradients
-            var gradient_size_val = ["gradient-size disabled", "closest-side selected", "closest-corner", "farthest-side", "farthest-corner", "contain", "cover"],
-                    option_str = '';
-
-
-            option_str = gradx.generate_options(gradient_size_val);
-
-            this.$container.find('.gradx_radial_gradient_size').html(option_str);
-
 
             //cache divs for fast reference
             this.panel = this.$container.find(".gradx_panel_" + this.id);
@@ -549,26 +537,23 @@ var gradX = function(container, _options) {
                 var type = gradx.gx(this).val(), options, option_str = '';
 
                 if (type !== "linear") {
-                    //this.$container.find('.gradx_radial_gradient_size').show();
-
-                    gradx.generate_radial_options();
+                    gradx.$container.find('.gradx_radial_gradient_size').show();
+                    gradx.$container.find('.gradx_gradient_subtype2').show()
                 } else {
-
-                    gradx.generate_linear_options();
-                    gradx.$container.find('.gradx_gradient_subtype').val("left");
+                    gradx.$container.find('.gradx_radial_gradient_size').hide();
+                    gradx.$container.find('.gradx_gradient_subtype2').hide();
                 }
 
                 gradx.type = type;
                 gradx.direction = gradx.$container.find('.gradx_gradient_subtype').val();
 
-
-                gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
+                gradx.apply_style(gradx.panel, gradx.get_style_value());
             });
 
             //change type onload userdefined
             if (this.type !== "linear") {
                 this.$container.find('.gradx_gradient_type').val(this.type);
-                gradx.generate_radial_options();
+                this.$container.find('.gradx_gradient_subtype2').show()
 
                 var h, v;
 
@@ -594,6 +579,7 @@ var gradX = function(container, _options) {
                 }
 
                 gradx.direction = h + " " + v;
+
                 gradx.apply_style(gradx.panel, gradx.get_style_value());//(where,style)
             } else {
 
@@ -648,29 +634,47 @@ var gradX = function(container, _options) {
 
     function parseGradient(raw_gradient){
         try{
-            raw_gradient = raw_gradient.replace(/\s/,'');
             var grad_split = raw_gradient.split(/gradient/i);
             var type = grad_split[0];
             type = type.replace(/-webkit-|-moz-|-ms-|-o-/i, '').replace('-','');
 
-            var values = grad_split[1];
-            var direction = values.slice(1, values.indexOf(','));
-            var raw_color_stops = values.slice(values.indexOf(','), values.length-1);
-            var split_raw_color_stops = raw_color_stops.match(/rgb\([ ]?\d+,[ ]?\d+,[ ]?\d+\)[ ]?\d+\%/gi);
+            var other = grad_split[1];
+            var raw_direction = other.slice(1, other.indexOf(','));
+            raw_direction = $.trim(raw_direction); // .replace(/\s/g,'');
+            raw_direction = raw_direction.split(' ')
+            var direction = $.trim(raw_direction[0]);
+            var sub_direction = $.trim(raw_direction[1]);
+
+            if(type.indexOf('radial') != -1){
+                other = other.slice(other.indexOf(',') + 1, other.length-1);
+                var raw_shape = other.slice(0, other.indexOf(','));
+                raw_shape = $.trim(raw_shape); // .replace(/\s/g,'');
+                raw_shape = raw_shape.split(' ')
+                var shape = $.trim(raw_shape[0]);
+                var sub_shape = $.trim(raw_shape[1]);
+            }
+
+            other = other.slice(other.indexOf(',') + 1, other.length);
+            var raw_color_stops = other.match(/rgb\([ ]?\d+,[ ]?\d+,[ ]?\d+\)[ ]?([\d]+\%)?/gi);
 
             var color_stops = [];
 
-            for(var i=0;i<split_raw_color_stops.length;i++){
-                var raw_color_stop = split_raw_color_stops[i];
+            for(var i=0;i<raw_color_stops.length;i++){
+                var raw_color_stop = raw_color_stops[i];
                 var color = raw_color_stop.match(/rgb\([ ]?\d+,[ ]?\d+,[ ]?\d+\)/i)[0];
-                var position = raw_color_stop.match(/[\d]+%/i)[0];
-                position = position.replace('%','');
-                position = parseInt(position);
+
+                var position = '';
+                var raw_position = raw_color_stop.match(/[\d]+%/i);
+                if(raw_position != null && raw_position != undefined && raw_position.length == 1){
+                    position = raw_position[0];
+                    position = position.replace('%','');
+                    position = parseInt(position);
+                }
 
                 color_stops.push({color: color, position: position});
             }
 
-            return {type: type, direction: direction, color_stops: color_stops}
+            return {type: type, direction: direction, sub_direction: sub_direction, shape: shape, sub_shape: sub_shape, color_stops: color_stops}
         }catch(e){
             console.log(e.message);
             throw new Error('Invalid gradient value', raw_gradient);
@@ -725,10 +729,21 @@ var gradX = function(container, _options) {
         gradx.default_value = gradx.$target.css('background-image');
     }
 
-    if(gradx.default_value != undefined && gradx.default_value != null){
+    if(gradx.default_value != undefined && gradx.default_value != null && gradx.default_value != 'none'){
         gradx.parsed_default_value = parseGradient(gradx.default_value);
-        gradx.type = gradx.parsed_default_value.type;
+        if(gradx.debug){
+            console.log('default gradient : ', gradx.parsed_default_value);
+        }
+        if(gradx.parsed_default_value.type == 'linear'){
+            gradx.type = gradx.parsed_default_value.type;
+        }else{
+            gradx.type = gradx.parsed_default_value.shape;
+        }
         gradx.direction = gradx.parsed_default_value.direction;
+        gradx.sub_direction = gradx.parsed_default_value.sub_direction;
+        gradx.sub_direction = gradx.parsed_default_value.sub_direction;
+        gradx.shape = gradx.parsed_default_value.shape;
+        gradx.sub_shape = gradx.parsed_default_value.sub_shape;
     }
 
     gradx.load_gradx(options.$container, gradx.sliders);
