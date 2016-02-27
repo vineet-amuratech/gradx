@@ -37,6 +37,7 @@
                     gradx.remove_sliders();
                     gradx.add_slider([]);
                     gradx.set_control_options();
+                    gradx.apply_default_styles();
                 }
             }else{
                 throw new Error('Gradx not initialized for this container');
