@@ -255,20 +255,24 @@
         },
         load_info: function(ele) {
             this.current_slider_id = "." + $(ele).data('slider-id');
-            //check if current clicked element is an slider
-            if (this.slider_ids.indexOf($(ele).data('slider-id')) != -1) {
-                var color = this.$container.find(this.current_slider_id).css("backgroundColor");
-                //but what happens if @color is not in RGB ? :(
-                var rgb = this.get_rgb_obj(color);
 
-                var left = $(ele).css("left");
-                this.$container.find(".gradx_slider_info") //info element cached before
-                .css("left", left)
-                .show();
+            // FIXME - is this required ?
+            // var color = this.$container.find(this.current_slider_id).css("backgroundColor");
+            // //but what happens if @color is not in RGB ? :(
+            // var rgb = this.get_rgb_obj(color);
+            // this.cp.spectrum("set", rgb);
 
-                this.set_colorpicker(rgb);
+            var left = $(ele).css("left");
+            left = parseInt(left);
+            if(left < this.slider_info_width/2){
+                left = this.slider_info_width/2;
+            }else if(left > (this.container_width - this.slider_info_width/2)){
+                left = this.container_width - this.slider_info_width/2;
             }
 
+            this.$container.find(".gradx_slider_info") //info element cached before
+            .css("left", left)
+            .show();
         },
         hide_info: function() {
             if (!gradx.slider_hovered[gradx.id]) {
@@ -340,20 +344,7 @@
                     },
                     drag: function() {
                         gradx.apply_default_styles();
-                        var left = gradx.$container.find(gradx.current_slider_id).css("left");
-
-                        if(parseInt(left) < $('.gradx_slider_info').width()/2){
-                            left = $('.gradx_slider_info').width()/2;
-                        }
-
-                        gradx.$container.find(".gradx_slider_info") //info element cached before
-                        .css("left", left)
-                        .show();
-
-                        var color = gradx.$container.find(gradx.current_slider_id).css("backgroundColor");
-                        // TODO - handle non RGB colors
-                        var rgb = gradx.get_rgb_obj(color);
-                        gradx.cp.spectrum("set", rgb);
+                        gradx.load_info(this);
                     }
                 }).click(function() {
                     gradx.load_info(this);
@@ -370,7 +361,7 @@
             gradx.$container.find(".gradx_slider").remove();
             gradx.slider_ids = [];
         },
-        set_colorpicker: function(clr) {
+        initialize_colorpicker: function(clr) {
             gradx.cp.spectrum({
                 move: function(color) {
                     if (gradx.current_slider_id != false) {
@@ -492,13 +483,14 @@
             this.panel = this.$container.find(".gradx_panel_" + this.id);
 
             this.container_width = this.$container.find(".gradx_panel").width();
+            this.slider_info_width = this.$container.find(".gradx_slider_info").width();
             this.min_width = 0;
 
             //cache the element
             gradx.cp = this.$container.find('.gradx_slider_content');
 
             //call the colorpicker plugin
-            gradx.set_colorpicker();
+            gradx.initialize_colorpicker();
 
             this.add_slider(sliders);
 
