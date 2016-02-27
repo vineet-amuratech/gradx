@@ -67,7 +67,8 @@
             $(function(){
                 $("#gradX").gradX({
                     target: $("#target"),
-                    default_value: 'linear-gradient(left , rgba(139, 33, 163, 0.631373) 4% , rgb(228, 18, 53) 46%)',
+                    default_value: 'linear-gradient(left , rgba(139, 33, 163, 0.631373) 0% , rgb(228, 18, 53) 100%)',
+                    // debug: true,
                     change: function(sliders, gradient_value){
                     console.log('change : ', gradient_value);
                     }

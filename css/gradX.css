@@ -15,13 +15,15 @@
 }
 
 .gradx .gradx_container {
-  padding: 0% 2% 0% 2%;
   height: calc(100% - 30px);
   overflow: hidden;
 }
 
+.gradx .gradx_panel_wrapper{
+  padding: 0 5px;
+}
+
 .gradx .gradx_panel {
-  width: 98%;
   height: 80%;
   border: 1px solid #ccc;
 }
@@ -32,8 +34,6 @@
 }
 
 .gradx .gradx_start_sliders {
-  width: 102%;
-  margin-left: -2%;
   background: whitesmoke;
   height: 100%;
   box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
