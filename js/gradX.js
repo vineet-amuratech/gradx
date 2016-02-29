@@ -8,50 +8,53 @@
     $.fn.gradX = function(opts, extra) {
         var gradx_id = $(this).data('gradx-id');
 
-        if( opts == undefined || opts == null || $.isPlainObject(opts)){
-            if(gradx_id == undefined){
-                gradx.id = gradx.get_random_number();
-                $(this).data('gradx-id', gradx.id);
-            }else{
-                throw new Error('Gradx is already initialized for this container');
-            }
-
-            gradx.container = this;
-            gradx.$container = $(this);
-            gradx.options = $.fn.gradX.defaults;
-            gradx._options = opts;
-            gradx.initialize();
-
-            return this;
-        }else if ( opts === "val") {
-            if(gradx_id != undefined){
-                if(extra == undefined || extra == null){
-                    if(gradx.cross_browzer){
-                        return gradx.values
-                    }else{
-                        return gradx.values[gradx.values.length-1];
-                    }
+        if($(this).length > 0){
+            var gradx_id = $(this).data('gradx-id');
+            if( opts == undefined || opts == null || $.isPlainObject(opts)){
+                if(gradx_id == undefined){
+                    gradx.id = gradx.get_random_number();
+                    $(this).data('gradx-id', gradx.id);
                 }else{
-                    gradx.default_value = extra;
-                    gradx.parse_value(extra);
-                    gradx.remove_sliders();
-                    gradx.add_slider([]);
-                    gradx.set_control_options();
-                    gradx.apply_default_styles();
+                    throw new Error('Gradx is already initialized for this container');
                 }
-            }else{
-                throw new Error('Gradx not initialized for this container');
-            }
-        }else if ( opts === "destroy") {
-            if(gradx_id != undefined){
+
                 gradx.container = this;
                 gradx.$container = $(this);
-                gradx.destroy_gradx();
+                gradx.options = $.fn.gradX.defaults;
+                gradx._options = opts;
+                gradx.initialize();
+
+                return this;
+            }else if ( opts === "val") {
+                if(gradx_id != undefined){
+                    if(extra == undefined || extra == null){
+                        if(gradx.cross_browzer){
+                            return gradx.values
+                        }else{
+                            return gradx.values[gradx.values.length-1];
+                        }
+                    }else{
+                        gradx.default_value = extra;
+                        gradx.parse_value(extra);
+                        gradx.remove_sliders();
+                        gradx.add_slider([]);
+                        gradx.set_control_options();
+                        gradx.apply_default_styles();
+                    }
+                }else{
+                    throw new Error('Gradx not initialized for this container');
+                }
+            }else if ( opts === "destroy") {
+                if(gradx_id != undefined){
+                    gradx.container = this;
+                    gradx.$container = $(this);
+                    gradx.destroy_gradx();
+                }else{
+                    throw new Error('Gradx not initialized for this container');
+                }
             }else{
-                throw new Error('Gradx not initialized for this container');
+                throw new Error('wrong argument value');
             }
-        }else{
-            throw new Error('wrong argument value');
         }
     };
 
@@ -189,7 +192,6 @@
                 id = "." + gradx.slider_ids[i];
                 offset = parseInt($(id).css("left"));
                 position = parseInt((offset / gradx.container_width) * 100);
-                position -= 6; //TODO: find why this is required
                 gradx.sliders.push([this.$container.find(id).css("background-color"), position]);
             }
 
@@ -428,6 +430,9 @@
             this.cp.spectrum('destroy');
             $(this.$container).removeData('gradx-id');
 
+            this.sliders = [];
+            this.slider_ids = [];
+            this.slider_index = 0;
             delete this.cp;
             delete this.$container;
         },
