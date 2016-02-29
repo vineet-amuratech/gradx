@@ -254,25 +254,25 @@
 
         },
         load_info: function(ele) {
+
             this.current_slider_id = "." + $(ele).data('slider-id');
+            //check if current clicked element is an slider
+            if (this.slider_ids.indexOf($(ele).data('slider-id')) != -1) {
+                var left = $(ele).css("left");
+                left = parseInt(left);
+                if(this.slider_info_width > this.container_width || left < this.slider_info_width/2){
+                    left = this.slider_info_width/2;
+                }else if(left > (this.container_width - this.slider_info_width/2)){
+                    left = this.container_width - this.slider_info_width/2;
+                }
+                this.$container.find(".gradx_slider_info") //info element cached before
+                .css("left", left)
+                .show();
 
-            // FIXME - is this required ?
-            // var color = this.$container.find(this.current_slider_id).css("backgroundColor");
-            // //but what happens if @color is not in RGB ? :(
-            // var rgb = this.get_rgb_obj(color);
-            // this.cp.spectrum("set", rgb);
-
-            var left = $(ele).css("left");
-            left = parseInt(left);
-            if(left < this.slider_info_width/2){
-                left = this.slider_info_width/2;
-            }else if(left > (this.container_width - this.slider_info_width/2)){
-                left = this.container_width - this.slider_info_width/2;
+                var color = this.$container.find(this.current_slider_id).css("backgroundColor");
+                // this.cp.spectrum("set", color);
+                this.initialize_colorpicker(color);
             }
-
-            this.$container.find(".gradx_slider_info") //info element cached before
-            .css("left", left)
-            .show();
         },
         hide_info: function() {
             if (!gradx.slider_hovered[gradx.id]) {
@@ -344,7 +344,22 @@
                     },
                     drag: function() {
                         gradx.apply_default_styles();
-                        gradx.load_info(this);
+                        var left = gradx.$container.find(gradx.current_slider_id).css("left");
+                        left = parseInt(left);
+
+                        if(this.slider_info_width > this.container_width || left < this.slider_info_width/2){
+                            left = this.slider_info_width/2;
+                        }else if(left > (this.container_width - this.slider_info_width/2)){
+                            left = this.container_width - this.slider_info_width/2;
+                        }
+
+                        gradx.$container.find(".gradx_slider_info") //info element cached before
+                        .css("left", left)
+                        .show();
+
+                        var color = gradx.$container.find(gradx.current_slider_id).css("backgroundColor");
+                        // gradx.cp.spectrum("set", color);
+                        gradx.initialize_colorpicker(color);
                     }
                 }).click(function() {
                     gradx.load_info(this);
@@ -483,7 +498,8 @@
             this.panel = this.$container.find(".gradx_panel_" + this.id);
 
             this.container_width = this.$container.find(".gradx_panel").width();
-            this.slider_info_width = this.$container.find(".gradx_slider_info").width();
+            // FIXME - avoid static value, find a way to get with of info when its hidden
+            this.slider_info_width = 212; // this.$container.find(".gradx_slider_info").width();
             this.min_width = 0;
 
             //cache the element
