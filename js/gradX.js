@@ -279,7 +279,6 @@
         hide_info: function() {
             if (!gradx.slider_hovered[gradx.id]) {
                 gradx.$container.find(".gradx_slider_info").hide();
-                return false;
             }
         },
         //add slider
