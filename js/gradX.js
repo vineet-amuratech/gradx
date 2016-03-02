@@ -25,35 +25,35 @@
                 gradx.initialize();
 
                 return this;
-            }else if ( opts === "val") {
+            }else if (typeof opts === "string") {
                 if(gradx_id != undefined){
-                    if(extra == undefined || extra == null){
-                        if(gradx.cross_browzer){
-                            return gradx.values
+                    if ( opts === "is_initialized") {
+                        return gradx_id != undefined;
+                    } else if ( opts === "val") {
+                        if(extra == undefined || extra == null){
+                            if(gradx.cross_browzer){
+                                return gradx.values
+                            }else{
+                                return gradx.values[gradx.values.length-1];
+                            }
                         }else{
-                            return gradx.values[gradx.values.length-1];
+                            gradx.default_value = extra;
+                            gradx.parse_value(extra);
+                            gradx.remove_sliders();
+                            gradx.add_slider([]);
+                            gradx.set_control_options();
+                            gradx.apply_default_styles();
                         }
+                    }else if ( opts === "destroy") {
+                        gradx.container = this;
+                        gradx.$container = $(this);
+                        gradx.destroy_gradx();
                     }else{
-                        gradx.default_value = extra;
-                        gradx.parse_value(extra);
-                        gradx.remove_sliders();
-                        gradx.add_slider([]);
-                        gradx.set_control_options();
-                        gradx.apply_default_styles();
+                        throw new Error('wrong argument value');
                     }
                 }else{
                     throw new Error('Gradx not initialized for this container');
                 }
-            }else if ( opts === "destroy") {
-                if(gradx_id != undefined){
-                    gradx.container = this;
-                    gradx.$container = $(this);
-                    gradx.destroy_gradx();
-                }else{
-                    throw new Error('Gradx not initialized for this container');
-                }
-            }else{
-                throw new Error('wrong argument value');
             }
         }
     };
@@ -349,10 +349,10 @@
                         var left = gradx.$container.find(gradx.current_slider_id).css("left");
                         left = parseInt(left);
 
-                        if(this.slider_info_width > this.container_width || left < this.slider_info_width/2){
-                            left = this.slider_info_width/2;
-                        }else if(left > (this.container_width - this.slider_info_width/2)){
-                            left = this.container_width - this.slider_info_width/2;
+                        if(gradx.slider_info_width > gradx.container_width || left < gradx.slider_info_width/2){
+                            left = gradx.slider_info_width/2;
+                        }else if(left > (gradx.container_width - gradx.slider_info_width/2)){
+                            left = gradx.container_width - gradx.slider_info_width/2;
                         }
 
                         gradx.$container.find(".gradx_slider_info") //info element cached before
