@@ -964,7 +964,7 @@
     $.spectrum.palettes = { };
 
     $.fn.spectrum.processNativeColorInputs = function () {
-        var colorInput = $("<input type='color' value='!' />")[0];
+        var colorInput = $("<input type='color' />")[0];
         var supportsColor = colorInput.type === "color" && colorInput.value != "!";
 
         if (!supportsColor) {

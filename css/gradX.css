@@ -1,7 +1,3 @@
-.gradx .gradx_hide {
-  display: none;
-}
-
 .gradx {
   position: relative;
   background: #FAFAFA;
@@ -12,53 +8,47 @@
   background: -ms-linear-gradient(top, #FAFAFA 0%,#DFDFDF 100%);
   background: linear-gradient(top, #FAFAFA 0%,#DFDFDF 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#dfdfdf',GradientType=0 );
-  border: 4px solid #dfdfdf;
-  padding: 10px;
+  border: 2px solid #dfdfdf;
+  padding: 5px;
   font-weight: normal;
-  font-size: 12px;
-}
-
-.gradx textarea,input,select {
-  font-size: 12px;
+  float: left;
 }
 
 .gradx .gradx_container {
-  padding: 10px;
-  background: white;
-  padding-left: 16px;
-  border: 5px solid #e5e5e5;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -o-border-radius: 2px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  height: calc(100% - 30px);
+  overflow: hidden;
+}
+
+.gradx .gradx_panel_wrapper{
+  padding: 0 5px;
 }
 
 .gradx .gradx_panel {
-  width: 400px;
-  height: 42px;
+  height: 80%;
   border: 1px solid #ccc;
 }
 
+.gradx_start_sliders_container{
+  height: 20%;
+  padding-top: 5px;
+}
+
 .gradx .gradx_start_sliders {
-  width: 412px;
-  margin-top: 8px;
-  margin-left: -0.4em;
   background: whitesmoke;
-  height: 12px;
+  height: 100%;
   box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   -webkit-box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   -moz-box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   -o-box-shadow: 5px 9px 30px rgba(0, 0, 0, .5) inset;
   border: 1px solid #f1f1f1;
+  position: relative;
 }
 
 .gradx .gradx_slider {
   position: absolute;
   left: 0px;
   width: 10px;
-  height: 10px;
+  height: 95%;
   background: red;
   border: 1px solid black;
   display: inline-block;
@@ -70,52 +60,17 @@
   cursor: move;
 }
 
-.gradx .gradx_slectboxes select {
-  color: black;
-  vertical-align: baseline;
-}
-
 .gradx .gradx_slider:after {
   content: "";
   position: absolute;
   bottom: 10px;
   left: 4px;
   border-style: solid;
-  border-width: 70px 1px 0px 0px;
+  border-width: 6000px 1px 0px 0px;
   border-color: transparent #000;
   display: block;
   width: 0;
   z-index: 1;
-}
-
-.gradx .gradx_code, .gradx .gradx_code:focus {
-  padding: 8px;
-  color: #111;
-  text-shadow: #eee 0 1px;
-  background: #bba;
-  margin-top: 5px;
-  border-radius: 4px;
-  font-size: 12px;
-  display: none;
-  overflow: auto;
-  width: 100%;
-  min-height: 200px;
-  border: 1px solid #ccc;
-  resize: vertical;
-  font-family: 'Maven Pro', sans-serif;
-  border: 0;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-  -o-box-shadow: none !important;
-  line-height: 14px;
-
-  /* the long awaited dream of 100% width comes true */
-  /* All hail CSS3 */
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -o-box-sizing: border-box;
 }
 
 .gradx .gradx_slider_info {
@@ -126,58 +81,9 @@
 }
 
 .gradx .gradx_slider_controls {
-  margin-left: 15px;
+  margin-left: 145px;
   padding-top:4px;
   padding-bottom: 4px;
-}
-
-.gradx .gradx_add_slider {
-  border: 1px solid black;
-  width: 50px;
-  margin-bottom: 4px;
-}
-
-
-.gradx .gradx_slectboxes {
-  display: inline;
-}
-
-.gradx .gradx_gradient_type {
-  height: 25px;
-  background: #efefef;
-  border: 1px solid #ccc;
-  padding-right: 2px;
-  width: 115px;
-  margin: 0;
-}
-
-.gradx .gradx_btn > .icon {
-  position: relative;
-  left: -3px;
-  background-size: 12px 12px;
-  top: 2px;
-  display: inline-block;
-  height: 12px;
-  width: 12px;
-  background-position: 0 0;
-}
-
-.gradx .gradx_btn > .icon-add {
-  background-image: url("icons/plus.png");
-  left: -10px;
-}
-
-.gradx .gradx_btn > .icon-remove {
-  background-image: url("icons/remove.png");
-}
-
-
-.gradx .gradx_btn > .icon-file-css {
-  background-image: url("icons/file-css.png");
-}
-
-.gradx .gradx_btn > .icon-preset {
-  background-image: url("icons/preset.png");
 }
 
 /* Common stuff */
@@ -251,92 +157,14 @@
   background-color: #333;
 }
 
-/* some bootstrap styles */
-
-.gradx .gradx_btn {
-  display: inline-block;
-  padding: 4px 10px 4px;
-  font-size: 13px;
-  line-height: 18px;
-  color: #333333;
-  text-align: center;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-  vertical-align: middle;
-  cursor: pointer;
-  background-color: #f5f5f5;
-  background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
-  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-  background-repeat: repeat-x;
-  border: 1px solid #cccccc;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-  border-bottom-color: #b3b3b3;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
-  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+.gradx-input-xs{
+  height: 25px !important;
+  padding: 0px !important;
+  font-size: 12px !important;
+  border-radius: 3px !important;
 }
 
-.gradx .gradx_btn:hover,
-.gradx .gradx_btn:active,
-.gradx .gradx_btn.active,
-.gradx .gradx_btn.disabled,
-.gradx .gradx_btn[disabled] {
-  background-color: #e6e6e6;
-}
-
-.gradx .gradx_btn:active,
-.gradx .gradx_btn.active {
-  background-color: #cccccc \9;
-}
-
-.gradx .gradx_btn:hover {
-  color: #333333;
-  text-decoration: none;
-  background-color: #e6e6e6;
-  /* Buttons in IE7 don't get borders, so darken on hover */
-
-  background-position: 0 -15px;
-  -webkit-transition: background-position 0.1s linear;
-  -moz-transition: background-position 0.1s linear;
-  -ms-transition: background-position 0.1s linear;
-  -o-transition: background-position 0.1s linear;
-  transition: background-position 0.1s linear;
-}
-
-.gradx .gradx_btn:focus {
-  outline: thin dotted #333;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-}
-
-.gradx .gradx_btn.active,
-.gradx .gradx_btn:active {
-  background-color: #e6e6e6;
-  background-color: #d9d9d9 \9;
-  background-image: none;
-  outline: 0;
-  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.gradx .gradx_btn.disabled,
-.gradx .gradx_btn[disabled] {
-  cursor: default;
-  background-color: #e6e6e6;
-  background-image: none;
-  opacity: 0.65;
-  filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+.gradx-stripped-col{
+  padding-right: 5px !important;
+  padding-left: 5px !important;
 }
